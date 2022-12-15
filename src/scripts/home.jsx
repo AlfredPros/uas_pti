@@ -1,79 +1,64 @@
 import "../styles/stylesHome.css";
 import dogLogo from "../resources/spike_logo.png";
-
-var players = [];
-
-$("#addPlayerButton").click(() => addPlayer());
-
-function showPlayerList() {
-  $("#playerList").empty();
-  for (let i = 0; i < players.length; i++) {
-    $("#playerList").append("<li>" + players[i].name + "</li>");
-  }
-}
-
-$("#playButton").click(function () {
-  if (players.length < 2) {
-    alert("Must be more than one player!!!");
-    return;
-  }
-  sessionStorage.setItem("players", JSON.stringify(players));
-  window.location.href = "game.html";
-});
-
-$("#playerInput").keyup(function (event) {
-  if (event.keyCode === 13) {
-    addPlayer();
-  }
-});
-
-//insert_player();  // This doesn't work because null value
-
-function addPlayer() {
-  if (players.length >= 5) {
-    alert("Cannot add more players!");
-    $("#playerInput").val("");
-    return;
-  }
-  player_name = $("#playerInput").val();
-  if (player_name.length < 1) {
-    alert("Please Input Name");
-    return;
-  }
-  for (let i = 0; i < players.length; i++) {
-    if (players[i].name == player_name) {
-      alert("Player already exists");
-      return;
-    }
-  }
-  var player = {
-    name: player_name,
-    play_status: true,
-  };
-  players.push(player);
-  console.log(players);
-  $("#playerInput").val("");
-  showPlayerList();
-  insert_player();
-}
-
-function insert_player() {
-  if (players.length == 0) {
-    document.getElementById("insertplayer").innerHTML = "Insert 1st player";
-  } else if (players.length == 1) {
-    document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
-  } else if (players.length == 2) {
-    document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
-  } else if (players.length == 3) {
-    document.getElementById("insertplayer").innerHTML = "Insert 4th player";
-  } else if (players.length == 4) {
-    document.getElementById("insertplayer").innerHTML = "Insert 5th player";
-  } else {
-    document.getElementById("insertplayer").innerHTML = "Player is full";
-  }
-}
+import React, { useState, useRef } from "react";
 
 export default function Home() {
+  const [players, setPlayers] = useState([]);
+  const inputRef = useRef(null);
+
+  function showPlayerList() {
+    $("#playerList").empty();
+    for (let i = 0; i < players.length; i++) {
+      $("#playerList").append("<li>" + players[i].name + "</li>");
+    }
+  }
+
+  function addPlayer() {
+    if (players.length >= 5) {
+      alert("Cannot add more players!");
+      inputRef.current.value = "";
+      return;
+    }
+    let player_name = inputRef.current.value;
+    if (player_name.length < 1) {
+      alert("Please Input Name");
+      return;
+    }
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].name == player_name) {
+        alert("Player already exists");
+        return;
+      }
+    }
+    var player = {
+      name: player_name,
+      play_status: true,
+    };
+    let newPlayers = players;
+    newPlayers.push(player);
+    setPlayers(newPlayers);
+    console.log(players);
+    $("#playerInput").val("");
+    showPlayerList();
+    insert_player();
+  }
+
+  function insert_player() {
+    if (players.length == 0) {
+      document.getElementById("insertplayer").innerHTML = "Insert 1st player";
+    } else if (players.length == 1) {
+      document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
+    } else if (players.length == 2) {
+      document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
+    } else if (players.length == 3) {
+      document.getElementById("insertplayer").innerHTML = "Insert 4th player";
+    } else if (players.length == 4) {
+      document.getElementById("insertplayer").innerHTML = "Insert 5th player";
+    } else {
+      document.getElementById("insertplayer").innerHTML = "Player is full";
+    }
+  }
+
   return (
     <div className="container-fluid mt-4">
       <div className="row">
@@ -118,6 +103,12 @@ export default function Home() {
             type="text"
             className="form-control"
             id="playerInput"
+            ref={inputRef}
+            onKeyUp={(event) => {
+              if (event.keyCode === 13) {
+                addPlayer();
+              }
+            }}
             placeholder="New Player"
           />
           <label htmlFor="floatingInput">New Player</label>
@@ -126,6 +117,7 @@ export default function Home() {
         <div className="myFlexContainer">
           <button
             id="addPlayerButton"
+            onClick={addPlayer}
             style={{ width: "12rem" }}
             className="button btn-primary btn-block btn-1"
           >
@@ -133,6 +125,14 @@ export default function Home() {
           </button>
           <button
             id="playButton"
+            onClick={() => {
+              if (players.length < 2) {
+                alert("Must be more than one player!!!");
+                return;
+              }
+              sessionStorage.setItem("players", JSON.stringify(players));
+              window.location.href = "game.html";
+            }}
             style={{ width: "12rem" }}
             className="button btn-primary btn-block btn-1"
           >
