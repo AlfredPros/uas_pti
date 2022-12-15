@@ -1,0 +1,320 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#logo {
+  width: 7em;
+}
+
+.myFlexContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.myFlexContainer2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.playerDIV {
+  height: 5rem;
+}
+
+::placeholder {
+  color: #919191 !important;
+  text-shadow: #828282 !important;
+}
+
+.boxplayer {
+  background-color: #f3cf9c;
+  padding: 1rem 7rem;
+  text-align: center;
+}
+
+@font-face {
+  font-family: "Aller";
+  src: url(../resources/Aller.ttf);
+}
+
+#judul {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 3px 3px 3px white;
+  opacity: 2;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+#playerList {
+  margin-bottom: 0rem;
+  list-style-position: inside;
+}
+
+#player {
+  margin-bottom: 2px;
+}
+
+#player-turn {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 3px 3px 3px white;
+  opacity: 2;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+p {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 3px 3px 3px white;
+  opacity: 2;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+li {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 3px 3px 3px white;
+  opacity: 2;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+hr {
+  color: black;
+  opacity: 5;
+  height: 6px;
+  width: auto;
+  background-color: black;
+  border: 0.7px;
+}
+
+#addPlayerButton {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 1px 1px 1px white;
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* button{
+    background-color: #fec993 !important;
+    border-color: #fec993 !important;
+} */
+
+label {
+  font-family: "Aller";
+  color: gray;
+  opacity: 0.5;
+  font-weight: bold;
+}
+
+#staticBackdropLabel {
+  font-family: "Aller";
+  color: black;
+  opacity: 2;
+  font-weight: bold;
+}
+
+#ply_name {
+  font-family: "Aller";
+  color: black;
+  opacity: 1;
+  font-weight: bold;
+}
+
+#playButton {
+  font-family: "Aller";
+  color: black;
+  text-shadow: 1px 1px 1px white;
+  opacity: 2;
+  font-weight: bold;
+}
+
+.fade-in {
+  animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.button {
+  border: none;
+  /* font-family: 'Lato'; */
+  font-size: inherit;
+  text-shadow: 1px 1px 1px white;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+  padding: 10px;
+  display: inline-block;
+  margin: 10px 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  outline: none;
+  position: relative;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.button:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+/* Pseudo elements for icons */
+.button:before {
+  /* font-family: 'FontAwesome'; */
+  /* speak: none; */
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Icon separator */
+.button-sep {
+  padding: 25px 60px 25px 120px;
+}
+
+.button-sep:before {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Button 1 */
+.btn-1 {
+  background: #f4bb73;
+  color: black;
+}
+
+.btn-1:hover {
+  background: #dca868;
+}
+
+.btn-1:active {
+  background: #dca868;
+  top: 2px;
+}
+
+.btn-1:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
+}
+
+/* Button 2 */
+.btn-2 {
+  background: #fc948e;
+  color: #000;
+}
+
+.btn-2:hover {
+  background: #de837e;
+}
+
+.btn-2:active {
+  background: #de837e;
+  top: 2px;
+}
+
+.btn-2:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
+}
+
+/* Button 3 */
+.btn-3 {
+  background: #e74c3c;
+  color: black;
+}
+
+.btn-3:hover {
+  background: #c0392b;
+}
+
+.btn-3:active {
+  background: #c0392b;
+  top: 2px;
+}
+
+.btn-3:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
+}
+
+/* Button 3 */
+.btn-4 {
+  background: #00fe94;
+  color: #000;
+}
+
+.btn-4:hover {
+  background: #01cf79;
+}
+
+.btn-4:active {
+  background: #00e585;
+  top: 2px;
+}
+
+.btn-4:before {
+  position: absolute;
+  height: 100%;
+  left: 0;
+  top: 0;
+  line-height: 3;
+  font-size: 140%;
+  width: 60px;
+}
+
+#playerInput {
+  font-family: "Aller";
+  color: black;
+}
+
+.modal-background {
+  background-image: url("../resources/modalbackground.png");
+}
+
+.modal-header {
+  border-bottom-color: #919191;
+}
+
+.modal-footer {
+  border-top-color: #919191;
+}
