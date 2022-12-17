@@ -27,6 +27,9 @@ import spike_awake from "../resources/spike_awake.png";
 import React, { useEffect, useState, useRef } from "react";
 
 export default function Game() {
+  // Player
+  const [players, setPlayers] = useState(["a", "b", "c", "d"]);
+
   // Audio vars
   const [mute, setMute] = useState(false);
 
@@ -39,7 +42,12 @@ export default function Game() {
   const [num, setNum] = useState(4); // players.length
   const [spacing, setSpacing] = useState(1.0 / num);
   const [temp, setTemp] = useState("");
-  const [id, setId] = useState("0");
+  const [id, setId] = useState(0);
+  const [picked_correct_bone, setPicked_correct_bone] = useState(0);
+  const [win, setWin] = useState(false);
+
+  const [dangerous_boners, setDangerous_boners] = useState([]);
+  const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
   // Function to show the appropriate modal prompt.
@@ -429,8 +437,31 @@ export default function Game() {
     play_sound("hover" + rand);
   }
 
+  function initializeBones() {
+    let playerScoresTemp = [];
+    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    setPlayerScores(playerScoresTemp);
+
+    // Code to select random bones
+    let dangerBonerTemp = [];
+    for (let i = 0; dangerBonerTemp.length < num; i++) {
+      // Generate Random Number between 0 and 4*number of players
+      const x = randint(4 * num);
+      // Check if the number is already in danger_bones
+      if (!dangerBonerTemp.includes(x)) {
+        dangerBonerTemp.push(x);
+      }
+    }
+    setDangerous_boners(dangerBonerTemp);
+
+    // Generating bones
+  }
+
   useEffect(() => {
     show_modal("audio_prompt");
+    // Get players from Router
+    setPlayers(["a", "b", "c", "d"]);
+    initializeBones();
   }, []);
 
   return (
