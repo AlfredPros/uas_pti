@@ -21,6 +21,8 @@ import UI_Bell_2 from "../resources/UI_Bell_2.wav";
 import UI_Dark from "../resources/UI_Dark.wav";
 import UI_SciFi_Select from "../resources/UI_SciFi_Select.wav";
 import Equip1 from "../resources/Equip1.ogg";
+import bone_hidden from "../resources/bone_hidden.png";
+import bone from "../resources/bone.png";
 
 import spike_sleep from "../resources/spike_sleep.png";
 import spike_awake from "../resources/spike_awake.png";
@@ -42,7 +44,6 @@ export default function Game() {
   const [num, setNum] = useState(4); // players.length
   const [spacing, setSpacing] = useState(1.0 / num);
   const [temp, setTemp] = useState("");
-  const [id, setId] = useState(0);
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
@@ -229,7 +230,7 @@ export default function Game() {
       transition: "0.5s ease-in-out",
       transform: "scale(1.0)",
     };
-    doge.src = { spike_sleep };
+    doge.src = spike_sleep;
     */
 
     // Hide backdrop
@@ -381,26 +382,27 @@ export default function Game() {
   }
 
   function safer_boners_selected() {
-    picked_correct_bone++;
+    setPicked_correct_bone(picked_correct_bone + 1);
 
-    //update player score
+    // Update player score
     $("#" + players[playerTurn].name + "scoreboard span").html(
       ++playerScores[playerTurn]
     );
+    //setPlayerScores(...)
 
     // Check if all corect bones are picked
     if (picked_correct_bone == num * 3) {
       //stop the timer and declare victory
-      timerToggle = 0;
-      win = true;
+      setTimerToggle(0);
+      setWin(true);
       show_modal("player_tied");
       // change footer
       $("#footer_text").text("EVERYONE THAT SURVIVED WINS!!!!!");
       play_sound("victory2");
     } else {
       // Time restarts
-      seconds = 9;
-      miliSeconds = 99;
+      setSeconds(9);
+      setMiliSeconds(99);
 
       // Randomize sound
       let rand = randint(4) + 1;
@@ -413,15 +415,15 @@ export default function Game() {
 
   function next_player_turn() {
     if (playerTurn == players.length - 1) {
-      playerTurn = 0;
+      setPlayerTurn(0);
     } else {
-      playerTurn++;
+      setPlayerTurn(playerTurn + 1);
     }
   }
 
   function bone_clicked(obj) {
-    obj.src = "resources/bone_hidden.png";
-    obj.style = "width:100%;";
+    obj.src = bone_hidden;
+    obj.style = { width: "100%" };
 
     if (obj.className == "dangerous_boners") {
       dangerous_boners_selected();
@@ -455,6 +457,49 @@ export default function Game() {
     setDangerous_boners(dangerBonerTemp);
 
     // Generating bones
+    let id = 0;
+    for (let i = 0; i < num + 2; i++) {
+      let temp = "";
+      temp += "<tr>";
+
+      for (let j = 0; j < num + 2; j++) {
+        if (i == 0) {
+          // Header
+          temp += '<th style="width: ' + spacing + '%">';
+          if (!(j == 0 || j == num + 1)) {
+            if (dangerous_boners.includes(id)) {
+              temp +=
+                '<img class="dangerous_boners" src=' +
+                bone +
+                ' onclick="bone_clicked(this);" onmouseover="' +
+                hover_action +
+                '" style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/>';
+            } else {
+              temp +=
+                '<img class="safer_boners" src=' +
+                bone +
+                ' onclick="bone_clicked(this);" onmouseover="' +
+                hover_action +
+                '" style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/>';
+            }
+            id++;
+          }
+          temp += "</th>";
+        } else if (i != num + 1) {
+          // Content
+        } else {
+          // Footer
+        }
+      }
+
+      temp += "</tr>";
+
+      $("#game-content").append(temp);
+    }
   }
 
   useEffect(() => {
