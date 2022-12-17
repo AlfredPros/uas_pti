@@ -436,7 +436,7 @@ export default function Game() {
   function hover_action() {
     // play random hover sound
     let rand = randint(4) + 1;
-    play_sound("hover" + rand);
+    play_sound('hover' + rand);  // Sus
   }
 
   function initializeBones() {
