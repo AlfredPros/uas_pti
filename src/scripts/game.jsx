@@ -223,6 +223,9 @@ export default function Game() {
     };
     doge.src = { spike_sleep };
     */
+
+    // Hide backdrop
+    $(".modal-backdrop").remove();
   }
 
   /// Audio Functions
