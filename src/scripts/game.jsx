@@ -1,11 +1,47 @@
 import "../styles/stylesHome.css";
 import dogLogo from "../resources/spike_logo.png";
 import unmuted from "../resources/unmuted.png";
+import muted from "../resources/muted.png";
+import background_music from "../resources/background_music.mp3";
+import select from "../resources/select.wav";
+import Item1 from "../resources/Item1.ogg";
+import Correct2 from "../resources/Correct2.wav";
+import Miss from "../resources/Miss.ogg";
+import dog_bark from "../resources/dog_bark.opus";
+import kyaaa from "../resources/kyaaa.wav";
+import Scream from "../resources/Scream.ogg";
+import voice_human from "../resources/se_maoudamashii_voice_human02.ogg";
+import Disappointment from "../resources/Disappointment.ogg";
+import found from "../resources/found.wav";
+import confirm from "../resources/confirm.wav";
+import cancel from "../resources/cancel.wav";
+import Victory from "../resources/Victory.wav";
+import VictoryBoss from "../resources/VictoryBoss.wav";
+import UI_Bell_2 from "../resources/UI_Bell_2.wav";
+import UI_Dark from "../resources/UI_Dark.wav";
+import UI_SciFi_Select from "../resources/UI_SciFi_Select.wav";
+import Equip1 from "../resources/Equip1.ogg";
+
+import spike_sleep from "../resources/spike_sleep.png";
+import spike_awake from "../resources/spike_awake.png";
 import React, { useEffect, useState, useRef } from "react";
 
 export default function Game() {
+  // Audio vars
   const [mute, setMute] = useState(false);
 
+  // Timer vars
+  const [seconds, setSeconds] = useState(0);
+  const [miliSeconds, setMiliSeconds] = useState(0);
+  const [timerToggle, setTimerToggle] = useState(0);
+
+  // Table Bone vars
+  const [num, setNum] = useState(4); // players.length
+  const [spacing, setSpacing] = useState(1.0 / num);
+  const [temp, setTemp] = useState("");
+  const [id, setId] = useState("0");
+
+  /// Modal Functions
   // Function to show the appropriate modal prompt.
   function show_modal(prompt_type = "audio_prompt") {
     let myModal = new bootstrap.Modal(
@@ -24,11 +60,21 @@ export default function Game() {
           "<b>We play music on our site.<br/>Please note the volume.</b>"
         );
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-4" onclick="play_sound(\'confirm\'); play_music(false); continue_func();" data-bs-dismiss="modal" id="continue">Yes</button>'
+          '<button type="button" class="button btn-primary btn-block btn-4" data-bs-dismiss="modal" id="continue">Yes</button>'
         );
+        $("#continue").click(function () {
+          play_sound("confirm");
+          play_music(false);
+          continue_func();
+        });
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-2" onclick="play_sound(\'cancel\'); play_music(true); continue_func();" data-bs-dismiss="modal" id="cancel">No</button>'
+          '<button type="button" class="button btn-primary btn-block btn-2" data-bs-dismiss="modal" id="cancel">No</button>'
         );
+        $("#cancel").click(function () {
+          play_sound("cancel");
+          play_music(true);
+          continue_func();
+        });
 
         myModal.show();
         break;
@@ -50,9 +96,18 @@ export default function Game() {
         $("#staticBackdropFooter").append(
           '<button type="button" class="button btn-primary btn-block btn-4" onclick="play_sound(\'confirm\'); continue_func()" data-bs-dismiss="modal" id="continue">Continue</button>'
         );
+        $("#continue").click(function () {
+          play_sound("confirm");
+          play_music(false);
+          continue_func();
+        });
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-2" onclick="play_sound(\'cancel\'); window.location.replace(\'index.html\');" id="cancel">Start Over</button>'
+          '<button type="button" class="button btn-primary btn-block btn-2" id="cancel">Start Over</button>'
         );
+        $("#cancel").click(function () {
+          play_sound("cancel");
+          window.location.replace("index.html");
+        });
 
         myModal.show();
         break;
@@ -72,11 +127,19 @@ export default function Game() {
             " has been moved out from the game for being too slow.<br/>You can proceed without them or start a new game.</b>"
         );
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-4" onclick="play_sound(\'confirm\'); continue_func()" data-bs-dismiss="modal" id="continue">Continue</button>'
+          '<button type="button" class="button btn-primary btn-block btn-4" data-bs-dismiss="modal" id="continue">Continue</button>'
         );
+        $("#continue").click(function () {
+          play_sound("confirm");
+          continue_func();
+        });
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-2" onclick="play_sound(\'cancel\'); window.location.replace(\'index.html\');" id="cancel">Start Over</button>'
+          '<button type="button" class="button btn-primary btn-block btn-2" id="cancel">Start Over</button>'
         );
+        $("#cancel").click(function () {
+          play_sound("cancel");
+          window.location.replace("index.html");
+        });
 
         myModal.show();
         break;
@@ -104,8 +167,12 @@ export default function Game() {
             " has won the game! Congratulation!</b>"
         );
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-2" onclick="play_sound(\'cancel\'); window.location.replace(\'index.html\');" id="cancel">Start Over</button>'
+          '<button type="button" class="button btn-primary btn-block btn-2" id="cancel">Start Over</button>'
         );
+        $("#cancel").click(function () {
+          play_sound("cancel");
+          window.location.replace("index.html");
+        });
 
         myModal.show();
         break;
@@ -121,8 +188,12 @@ export default function Game() {
           "<b>All safe bones have been picked!<br/>All players that survived can go home safely now!"
         );
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-4" onclick="play_sound(\'confirm\'); window.location.replace(\'index.html\');" id="cancel">The End</button>'
+          '<button type="button" class="button btn-primary btn-block btn-4" id="cancel">The End</button>'
         );
+        $("#cancel").click(function () {
+          play_sound("confirm");
+          window.location.replace("index.html");
+        });
 
         myModal.show();
         break;
@@ -136,47 +207,42 @@ export default function Game() {
   // Continue button function
   function continue_func() {
     //reset and start the timer
-    seconds = 9;
-    miliSeconds = 99;
-    timerToggle = 1;
+    setSeconds(9);
+    setMiliSeconds(99);
+    setTimerToggle(1);
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
     //enlarge dog
+    /*
     let doge = document.getElementById("dog");
-    doge.style =
-      "width:100%; transition: 0.5s ease-in-out; transform: scale(1.0);";
-    doge.src = "resources/spike-sleep.png";
+    doge.style = {
+      width: "100%",
+      transition: "0.5s ease-in-out",
+      transform: "scale(1.0)",
+    };
+    doge.src = { spike_sleep };
+    */
   }
 
+  /// Audio Functions
   // Mute / Unmute
   function mute_func() {
     let mute_btn = document.getElementById("mute");
     let track = document.getElementById("background_music");
 
-    dir = mute_btn.src;
-
-    dir = dir.split("/");
-
-    path = "";
-    for (i = 0; i < dir.length - 1; i++) {
-      path = path + dir[i] + "/";
-    }
-
-    if (dir[dir.length - 1] == "unmuted.png") {
-      path = path + "muted.png";
-      mute_btn.src = path;
+    if (track.muted === false) {
+      mute_btn.src = muted;
       track.muted = true;
       setMute(true);
-    } else if (dir[dir.length - 1] == "muted.png") {
-      path = path + "unmuted.png";
-      mute_btn.src = path;
+    } else if (track.muted === true) {
+      mute_btn.src = unmuted;
       track.muted = false;
       setMute(false);
     } else alert("Error occured!");
   }
 
-  // Music function
+  // Music Function
   function play_music(mute_init = false) {
     setMute(false);
     $("#background_music")[0].play();
@@ -184,6 +250,7 @@ export default function Game() {
     if (mute_init == true) mute_func();
   }
 
+  // Sound Function
   function play_sound(type) {
     // Sound effect
 
@@ -273,6 +340,92 @@ export default function Game() {
     }
   }
 
+  /// Table Bone Functions
+  function randint(max) {
+    // From 0 to max
+    return Math.floor(Math.random() * max);
+  }
+
+  // Bone Behavior
+  function dangerous_boners_selected() {
+    // Timer stopped, show 00:00
+    setTimerToggle(0);
+    $("#timer").html("00:00");
+    document.getElementById("timer").style.color = "#ff0000";
+
+    //Doge expands, hide bone
+    let doge = document.getElementById("dog");
+    doge.style = {
+      width: "100%",
+      transition: "0.25s ease-in-out",
+      transform: "scale(2.5)",
+    };
+    doge.src = spike_awake;
+
+    //change score board color to red
+    $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
+
+    //KickCurrentPlayer
+    KickCurrentPlayer();
+  }
+
+  function safer_boners_selected() {
+    picked_correct_bone++;
+
+    //update player score
+    $("#" + players[playerTurn].name + "scoreboard span").html(
+      ++playerScores[playerTurn]
+    );
+
+    // Check if all corect bones are picked
+    if (picked_correct_bone == num * 3) {
+      //stop the timer and declare victory
+      timerToggle = 0;
+      win = true;
+      show_modal("player_tied");
+      // change footer
+      $("#footer_text").text("EVERYONE THAT SURVIVED WINS!!!!!");
+      play_sound("victory2");
+    } else {
+      // Time restarts
+      seconds = 9;
+      miliSeconds = 99;
+
+      // Randomize sound
+      let rand = randint(4) + 1;
+      play_sound("bone" + rand);
+
+      //next player's turn
+      next_player_turn();
+    }
+  }
+
+  function next_player_turn() {
+    if (playerTurn == players.length - 1) {
+      playerTurn = 0;
+    } else {
+      playerTurn++;
+    }
+  }
+
+  function bone_clicked(obj) {
+    obj.src = "resources/bone_hidden.png";
+    obj.style = "width:100%;";
+
+    if (obj.className == "dangerous_boners") {
+      dangerous_boners_selected();
+    } else {
+      safer_boners_selected();
+    }
+    obj.onclick = "";
+  }
+
+  function hover_action() {
+    // play random hover sound
+    let rand = randint(4) + 1;
+    play_sound("hover" + rand);
+  }
+
   useEffect(() => {
     show_modal("audio_prompt");
   }, []);
@@ -357,125 +510,67 @@ export default function Game() {
               src={unmuted}
               style={{ width: "calc(24px + 3vw)", cursor: "pointer" }}
               id="mute"
-              onClick="{mute_func()}"
+              onClick={mute_func}
               draggable="false"
               onContextMenu={() => {
                 return false;
               }}
             />
-            <audio
-              src={require("../resources/background_music.mp3")}
-              id="background_music"
-              loop
-            >
+            <audio src={background_music} id="background_music" loop>
               music bgm
             </audio>
-            <audio
-              src={require("../resources/select.wav")}
-              id="sound_effect_bone1"
-            >
+            <audio src={select} id="sound_effect_bone1">
               sound bone1
             </audio>
-            <audio
-              src={require("../resources/Item1.ogg")}
-              id="sound_effect_bone2"
-            >
+            <audio src={Item1} id="sound_effect_bone2">
               sound bone2
             </audio>
-            <audio
-              src={require("../resources/Correct2.wav")}
-              id="sound_effect_bone3"
-            >
+            <audio src={Correct2} id="sound_effect_bone3">
               sound bone3
             </audio>
-            <audio
-              src={require("../resources/Miss.ogg")}
-              id="sound_effect_bone4"
-            >
+            <audio src={Miss} id="sound_effect_bone4">
               sound bone4
             </audio>
-            <audio
-              src={require("../resources/dog_bark.opus")}
-              id="sound_effect_doge1"
-            >
+            <audio src={dog_bark} id="sound_effect_doge1">
               sound doge1
             </audio>
-            <audio
-              src={require("../resources/kyaaa.wav")}
-              id="sound_effect_doge2"
-            >
+            <audio src={kyaaa} id="sound_effect_doge2">
               sound doge2
             </audio>
-            <audio
-              src={require("../resources/Scream.ogg")}
-              id="sound_effect_doge3"
-            >
+            <audio src={Scream} id="sound_effect_doge3">
               sound doge3
             </audio>
-            <audio
-              src={require("../resources/se_maoudamashii_voice_human02.ogg")}
-              id="sound_effect_doge4"
-            >
+            <audio src={voice_human} id="sound_effect_doge4">
               sound doge4
             </audio>
-            <audio
-              src={require("../resources/Disappointment.ogg")}
-              id="sound_effect_doge5"
-            >
+            <audio src={Disappointment} id="sound_effect_doge5">
               sound doge5
             </audio>
-            <audio
-              src={require("../resources/found.wav")}
-              id="sound_effect_doge6"
-            >
+            <audio src={found} id="sound_effect_doge6">
               sound doge6
             </audio>
-            <audio
-              src={require("../resources/confirm.wav")}
-              id="sound_effect_confirm"
-            >
+            <audio src={confirm} id="sound_effect_confirm">
               sound confirm
             </audio>
-            <audio
-              src={require("../resources/cancel.wav")}
-              id="sound_effect_cancel"
-            >
+            <audio src={cancel} id="sound_effect_cancel">
               sound cancel
             </audio>
-            <audio
-              src={require("../resources/Victory.wav")}
-              id="sound_effect_victory1"
-            >
+            <audio src={Victory} id="sound_effect_victory1">
               sound victory1
             </audio>
-            <audio
-              src={require("../resources/VictoryBoss.wav")}
-              id="sound_effect_victory2"
-            >
+            <audio src={VictoryBoss} id="sound_effect_victory2">
               sound victory2
             </audio>
-            <audio
-              src={require("../resources/UI_Bell_2.wav")}
-              id="sound_effect_hover1"
-            >
+            <audio src={UI_Bell_2} id="sound_effect_hover1">
               sound hover1
             </audio>
-            <audio
-              src={require("../resources/UI_Dark.wav")}
-              id="sound_effect_hover2"
-            >
+            <audio src={UI_Dark} id="sound_effect_hover2">
               sound hover2
             </audio>
-            <audio
-              src={require("../resources/UI_Sci-Fi_Select.wav")}
-              id="sound_effect_hover3"
-            >
+            <audio src={UI_SciFi_Select} id="sound_effect_hover3">
               sound hover3
             </audio>
-            <audio
-              src={require("../resources/Equip1.ogg")}
-              id="sound_effect_hover4"
-            >
+            <audio src={Equip1} id="sound_effect_hover4">
               sound hover4
             </audio>
           </div>
