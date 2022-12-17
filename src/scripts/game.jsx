@@ -31,6 +31,7 @@ import React, { useEffect, useState, useRef } from "react";
 export default function Game() {
   // Player
   const [players, setPlayers] = useState(["a", "b", "c", "d"]);
+  const [playerTurn, setPlayerTurn] = useState(0);
 
   // Audio vars
   const [mute, setMute] = useState(false);
@@ -41,7 +42,7 @@ export default function Game() {
   const [timerToggle, setTimerToggle] = useState(0);
 
   // Table Bone vars
-  const [num, setNum] = useState(4); // players.length
+  const [num, setNum] = useState(players.length); // 4
   const [spacing, setSpacing] = useState(1.0 / num);
   const [temp, setTemp] = useState("");
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
@@ -436,7 +437,7 @@ export default function Game() {
   function hover_action() {
     // play random hover sound
     let rand = randint(4) + 1;
-    play_sound('hover' + rand);  // Sus
+    play_sound("hover" + rand); // Sus
   }
 
   function initializeBones() {
@@ -463,7 +464,7 @@ export default function Game() {
       temp += "<tr>";
 
       for (let j = 0; j < num + 2; j++) {
-        if (i == 0) {
+        if (i === 0) {
           // Header
           temp += '<th style="width: ' + spacing + '%">';
           if (!(j == 0 || j == num + 1)) {
@@ -471,34 +472,90 @@ export default function Game() {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
-                ' onclick="bone_clicked(this);" onmouseover="' +
-                hover_action +
-                '" style="width:100%; cursor:pointer;" id="bone' +
+                ' style="width:100%; cursor:pointer;" id="bone' +
                 id +
                 '" draggable="false" oncontextmenu="return false"/>';
             } else {
               temp +=
                 '<img class="safer_boners" src=' +
                 bone +
-                ' onclick="bone_clicked(this);" onmouseover="' +
-                hover_action +
-                '" style="width:100%; cursor:pointer;" id="bone' +
+                ' style="width:100%; cursor:pointer;" id="bone' +
                 id +
                 '" draggable="false" oncontextmenu="return false"/>';
             }
             id++;
           }
           temp += "</th>";
-        } else if (i != num + 1) {
+        } else if (i !== num + 1) {
           // Content
+          if (j == 0 || j == 1) {
+            if (dangerous_boners.includes(id)) {
+              temp +=
+                '<td> <img class="dangerous_boners" src=' +
+                bone +
+                ' style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/> </td>';
+            } else {
+              temp +=
+                '<td> <img class="safer_boners" src=' +
+                bone +
+                ' style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/> </td>';
+            }
+            id++;
+          }
+          if (j == 0 && i == 1) {
+            // Dog: id="dog"
+            temp +=
+              '<td colspan="' +
+              num +
+              '" rowspan="' +
+              num +
+              '"> <img src=' +
+              spike_sleep +
+              ' style="width:100%" id="dog" draggable="false" oncontextmenu="return false"/></td>';
+          }
         } else {
           // Footer
+          temp += "<td>";
+          if (!(j == 0 || j == num + 1)) {
+            if (dangerous_boners.includes(id)) {
+              temp +=
+                '<img class="dangerous_boners" src=' +
+                bone +
+                ' style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/>';
+            } else {
+              temp +=
+                '<img class="safer_boners" src=' +
+                bone +
+                ' style="width:100%; cursor:pointer;" id="bone' +
+                id +
+                '" draggable="false" oncontextmenu="return false"/>';
+            }
+            id++;
+          }
+          temp += "</td>";
         }
       }
 
       temp += "</tr>";
 
       $("#game-content").append(temp);
+
+      // Set bone functions
+      // Problem: this executes more than one.
+      for (let i = 0; i < num * 4; i++) {
+        $("#bone" + i).click(function () {
+          bone_clicked(this);
+        });
+        $("#bone" + i).mouseover(function () {
+          hover_action();
+        });
+      }
     }
   }
 
