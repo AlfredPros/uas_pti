@@ -454,7 +454,7 @@ export default function Game() {
       currentPlayers.map((player, index) => {
         let comp = playerTurn - 1;
         // if (playerTurn < 0)
-        if (comp < 0) comp = 3;
+        if (comp < 0) comp = players.length - 1;
         console.log(comp);
         if (index === comp) {
           console.log(index);
