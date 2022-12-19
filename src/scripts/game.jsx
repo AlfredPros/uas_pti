@@ -375,6 +375,7 @@ export default function Game() {
       transition: "0.25s ease-in-out",
       transform: "scale(2.5)"
     };
+    
     doge.src = spike_awake;
 
     //change score board color to red
@@ -386,7 +387,7 @@ export default function Game() {
 
   function safer_boners_selected() {
     setPicked_correct_bone(picked_correct_bone + 1);
-
+    console.log("saferboneselected " + picked_correct_bone)
     // Update player score
     $("#" + players[playerTurn].name + "scoreboard span").html(
       ++playerScores[playerTurn]
@@ -401,7 +402,7 @@ export default function Game() {
       show_modal("player_tied");
       // change footer
       $("#footer_text").text("EVERYONE THAT SURVIVED WINS!!!!!");
-      play_sound("victory2");
+      play_sound(VictoryBoss);
     } else {
       // Time restarts
       setSeconds(9);
@@ -549,7 +550,9 @@ export default function Game() {
 
       // Set bone functions
       // Problem: this executes more than one.
-      for (let i = 0; i < num * 4; i++) {
+      
+    }
+    for (let i = 0; i < num * 4; i++) {
         let idName = "#bone" + i;
         $(idName).click(function () {
           bone_clicked(this);
@@ -558,7 +561,6 @@ export default function Game() {
           hover_action();
         });
       }
-    }
   }
 
   useEffect(() => {
