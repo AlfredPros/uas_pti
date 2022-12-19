@@ -51,7 +51,6 @@ export default function Game() {
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
-  const [dangerous_boners, setDangerous_boners] = useState([]);
   const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
@@ -458,7 +457,6 @@ export default function Game() {
         dangerBonerTemp.push(x);
       }
     }
-    setDangerous_boners(dangerBonerTemp);
 
     // Generating bones
     let id = 0;
@@ -471,7 +469,7 @@ export default function Game() {
           // Header
           temp += '<th style="width: ' + spacing + '%">';
           if (!(j == 0 || j == num + 1)) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -492,7 +490,7 @@ export default function Game() {
         } else if (i !== num + 1) {
           // Content
           if (j == 0 || j == 1) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<td> <img class="dangerous_boners" src=' +
                 bone +
@@ -524,7 +522,7 @@ export default function Game() {
           // Footer
           temp += "<td>";
           if (!(j == 0 || j == num + 1)) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -552,10 +550,11 @@ export default function Game() {
       // Set bone functions
       // Problem: this executes more than one.
       for (let i = 0; i < num * 4; i++) {
-        $("#bone" + i).click(function () {
+        let idName = "#bone" + i;
+        $(idName).click(function () {
           bone_clicked(this);
         });
-        $("#bone" + i).mouseover(function () {
+        $(idName).mouseover(function () {
           hover_action();
         });
       }
