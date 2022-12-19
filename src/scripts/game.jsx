@@ -255,19 +255,15 @@ export default function Game() {
     seconds = 9;
     miliSeconds = 99;
     timerToggle = 1;
+
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
     //enlarge dog
 
-    let doge = document.getElementById("dog");
-    /*
-    doge.style = {
-      width: "100%",
-      transition: "0.5s ease-in-out",
-      transform: "scale(1.0)",
-    };
-    */
+    $("#dog").css("transition", "0.5s ease-in-out");
+    $("#dog").css("transform", "scale(1.0)");
+
     //if (doge != null) {
     //  doge.src = dogeImg; //spike_sleep;
     //}
@@ -406,13 +402,16 @@ export default function Game() {
 
     //Doge expands, hide bone
     let doge = document.getElementById("dog");
+
     // doge.style = {
     //   width: "100%",
     //   transition: "0.25s ease-in-out",
     //   transform: "scale(2.5)",
     // };
 
-    //doge.src = dogeImg; //spike_awake;
+    $("#dog").css("transition", "0.25s ease-in-out");
+    $("#dog").css("transform", "scale(2.5)");
+    // doge.src = dogeImg; //spike_awake;
 
     //change score board color to red
     $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
