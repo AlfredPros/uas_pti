@@ -119,7 +119,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -151,7 +151,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -184,7 +184,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -205,7 +205,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("confirm");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -572,7 +572,7 @@ export default function Game() {
     }
     const playerList = location.state.players.map((object) => object.name);
     console.log(playerList);
-    setPlayers(playerList);
+    setPlayers(playerList, playerList);
     console.log("Players");
     console.log(players);
     show_modal("audio_prompt");
@@ -587,11 +587,9 @@ export default function Game() {
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-sm-12 col-md-1 offset-md-1">
-            <a href="index.html">
-              <button className="button btn-primary btn-block btn-2">
+            <button className="button btn-primary btn-block btn-2" onClick={() => {navigate("/")}}>
                 Back
-              </button>
-            </a>
+            </button>
           </div>
           <div className="col-md-8 text-center">
             <h2 className="text-center" id="judul">
