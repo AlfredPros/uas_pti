@@ -389,7 +389,7 @@ export default function Game() {
     //doge.src = dogeImg; //spike_awake;
 
     //change score board color to red
-    $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
+    // $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
 
     //KickCurrentPlayer
     KickCurrentPlayer();
@@ -428,16 +428,19 @@ export default function Game() {
       show_modal("player_win");
     }
 
-    //remove current player
-    if (playerTurn == 0) {
-      setPlayers(players.splice(1, players.length - 1));
-    } else if (playerTurn == players.length - 1) {
-      setPlayers(players.splice(0, players.length - 1));
-    } else {
-      players.splice(playerTurn, 1);
-      console.log("current players:");
-      console.log(players);
-    }
+    // //remove current player
+    // if (playerTurn == 0) {
+    //   setPlayers(players.splice(1, players.length - 1));
+    // } else if (playerTurn == players.length - 1) {
+    //   setPlayers(players.splice(0, players.length - 1));
+    // } else {
+    //   players.splice(playerTurn, 1);
+    // }
+
+    setPlayers((currentPlayer) => {
+      return currentPlayer.filter((player, index) => index != playerTurn);
+    });
+
     //if kicked player is the last player in the queue, go to first player in the queue
     if (playerTurn >= players.length) {
       playerTurn = 0;
@@ -719,6 +722,8 @@ export default function Game() {
 
   useEffect(() => {
     if (tableCreated === false) initializeBones();
+    console.log("current players:");
+    console.log(players);
   }, [players]);
 
   return (
