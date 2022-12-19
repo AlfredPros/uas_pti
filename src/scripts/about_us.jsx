@@ -3,7 +3,10 @@ import Card from "./Card";
 import Contacts from "../contacts.js";
 function App() {
   return (
-    <div>
+    <div>  
+      <div>
+        <button  class="">Back</button>  
+      </div> 
       <h1 className="heading">About us</h1>
       <Card
         img={Contacts[0].imgURL}
@@ -28,7 +31,7 @@ function App() {
         name={Contacts[2].name}
         nim={Contacts[2].nim}
         email={Contacts[2].email}
-      />  
+      /> 
     </div>
   );
 }
