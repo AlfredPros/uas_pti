@@ -40,9 +40,13 @@ export default function Game() {
   const [mute, setMute] = useState(false);
 
   // Timer vars
-  const [seconds, setSeconds] = useState(10);
-  const [miliSeconds, setMiliSeconds] = useState(60);
-  const [timerToggle, setTimerToggle] = useState(0);
+  // const [seconds, setSeconds] = useState(10);
+  var seconds = 10;
+  // const [miliSeconds, setMiliSeconds] = useState(60);
+  var miliSeconds = 60;
+  // const [timerToggle, setTimerToggle] = useState(0);
+  var timerToggle = 0;
+  var late = false;
 
   // Table Bone vars
   const [temp, setTemp] = useState("");
@@ -221,9 +225,9 @@ export default function Game() {
   // Continue button function
   function continue_func() {
     //reset and start the timer
-    setSeconds(9);
-    setMiliSeconds(99);
-    setTimerToggle(1);
+    seconds = 9;
+    miliSeconds = 99;
+    timerToggle = 1
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
@@ -369,7 +373,7 @@ export default function Game() {
   // Bone Behavior
   function dangerous_boners_selected() {
     // Timer stopped, show 00:00
-    setTimerToggle(0);
+    timerToggle = 0;
     $("#timer").html("00:00");
     document.getElementById("timer").style.color = "#ff0000";
 
@@ -390,7 +394,7 @@ export default function Game() {
     KickCurrentPlayer();
   }
 
-  function KickCurrentPlayer(late = false) {
+  function KickCurrentPlayer(late) {
     if (late == true) {
       //change score board color to red
       $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
@@ -463,7 +467,7 @@ export default function Game() {
     let num = players.length;
     if (picked_correct_boner === num * 3) {
       //stop the timer and declare victory
-      setTimerToggle(0);
+      timerToggle = 0;
       setWin(true);
       show_modal("player_tied");
       // change footer
@@ -471,8 +475,8 @@ export default function Game() {
       play_sound(VictoryBoss);
     } else {
       // Time restarts
-      setSeconds(9);
-      setMiliSeconds(99);
+      seconds = 9;
+      miliSeconds = 99;
 
       // Randomize sound
       let rand = randint(4) + 1;
@@ -637,6 +641,70 @@ export default function Game() {
     const playerList = location.state.players;
     show_modal("audio_prompt");
     setPlayers(playerList);
+    
+    $(document).ready(function () {
+
+            //set a function to run every 0.01 second
+            setInterval(function () {
+
+                //update timer and turn variables
+                if (timerToggle > 0) {
+                    miliSeconds--;
+                    if (miliSeconds < 0) {
+                        miliSeconds = 99;
+                        seconds--;
+                        if (seconds < 0) {
+                            seconds = 9;
+                            KickCurrentPlayer(late = true);
+                            timerToggle = 0;
+                            if (playerTurn >= players.length - 1) {
+                                playerTurn = 0;
+                            }
+                        }
+                    }
+                }
+
+                //update the user interface
+                $("#player-turn").html(players[playerTurn].name);
+                if (seconds < 10) {
+                    if (seconds < 5) {
+                        if (miliSeconds < 10) {
+                            $("#timer").html("0" + seconds + ":0" + miliSeconds);
+                            document.getElementById("timer").style.color = "#ff0000";
+                        } else {
+                            $("#timer").html("0" + seconds + ":" + miliSeconds);
+                            document.getElementById("timer").style.color = "#ff0000";
+                        }
+                        /*
+                        if(seconds == 0 && miliSeconds == 0){
+                            $("#timer").html("00" + ":" + "00");
+                            timerToggle = 0;
+                            KickCurrentPlayer();
+                        }
+                        */
+                    } else {
+                        if (miliSeconds < 10) {
+                            $("#timer").html("0" + seconds + ":0" + miliSeconds);
+                            document.getElementById("timer").style.color = "#000";
+                        } else {
+                            $("#timer").html("0" + seconds + ":" + miliSeconds);
+                            document.getElementById("timer").style.color = "#000";
+                        }
+                    }
+
+                } else {
+                    if (miliSeconds < 10) {
+                        $("#timer").html("0" + seconds + ":0" + miliSeconds);
+                        document.getElementById("timer").style.color = "#ff0000";
+                    } else {
+                        $("#timer").html("0" + seconds + ":" + miliSeconds);
+                        document.getElementById("timer").style.color = "#ff0000";
+                    }
+                }
+
+            }, 10);
+
+        })
   }, []);
 
   useEffect(() => {
