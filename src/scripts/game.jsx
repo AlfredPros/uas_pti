@@ -31,7 +31,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
   // Player
-  const [players, setPlayers] = useState(["a", "b", "c", "d"]);
+  const [players, setPlayers] = useState(["a", "b", "c", "d", "e", "f"]);
   var playerTurn = 0;
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,6 +47,7 @@ export default function Game() {
   // Table Bone vars
   const [temp, setTemp] = useState("");
   const [win, setWin] = useState(false);
+  const [tableCreated, setTableCreated] = useState(false);
 
   // const [playerScores, setPlayerScores] = useState([]);
 
@@ -504,7 +505,9 @@ export default function Game() {
   }
 
   function initializeBones() {
-    let playerScoresTemp = [];
+    if (players.length > 5) return;
+
+    //let playerScoresTemp = [];
     //for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
     //setPlayerScores(playerScoresTemp);
 
@@ -572,7 +575,7 @@ export default function Game() {
           }
           if (j == 0 && i == 1) {
             // Dog: id="dog"
-            fetch('https://dog.ceo/api/breed/shiba/images/random') 
+            
             temp +=
               '<td colspan="' +
               num +
@@ -580,7 +583,7 @@ export default function Game() {
               num +
               '"> <img src=' +
               spike_sleep +
-              {"message":"https:\/\/images.dog.ceo\/breeds\/shiba\/shiba-10.jpg","status":"success"};
+              ' style="width:100%" id="dog" draggable="false" oncontextmenu="return false"/></td>';
           }
         } else {
           // Footer
@@ -610,10 +613,9 @@ export default function Game() {
       temp += "</tr>";
 
       $("#game-content").append(temp);
-
-      // Set bone functions
-      // Problem: this executes more than one.
     }
+    
+    // Set bone functions
     for (let i = 0; i < num * 4; i++) {
       let idName = "#bone" + i;
       $(idName).click(function () {
@@ -623,6 +625,8 @@ export default function Game() {
         hover_action();
       });
     }
+
+    setTableCreated(true);
   }
 
   useEffect(() => {
@@ -633,8 +637,11 @@ export default function Game() {
     const playerList = location.state.players;
     show_modal("audio_prompt");
     setPlayers(playerList);
-    initializeBones();
   }, []);
+
+  useEffect(() => {
+    if (tableCreated === false) initializeBones();
+  }, [players]);
 
   return (
     <>
