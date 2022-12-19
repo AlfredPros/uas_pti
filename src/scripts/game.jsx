@@ -144,8 +144,8 @@ export default function Game() {
       }
 
       case "player_lose": {
-        console.log(players);
-        let curr_player = players[playerTurn].name;
+        console.log(listPlayer);
+        let curr_player = listPlayer[playerTurn].name;
 
         $("#staticBackdropLabel").text("Spike Has Woken Up!");
         $("#staticBackdropBody").empty();
@@ -179,7 +179,7 @@ export default function Game() {
       }
 
       case "player_late": {
-        let curr_player = players[playerTurn].name;
+        let curr_player = listPlayer[playerTurn].name;
 
         $("#staticBackdropLabel").text(curr_player + " is too late!");
         $("#staticBackdropBody").empty();
@@ -212,12 +212,12 @@ export default function Game() {
       }
 
       case "player_win": {
-        let curr_player = players[playerTurn].name;
+        let curr_player = listPlayer[playerTurn].name;
         let next_player;
-        if (playerTurn == players.length - 1) {
-          next_player = players[0].name;
+        if (playerTurn == listPlayer.length - 1) {
+          next_player = listPlayer[0].name;
         } else {
-          next_player = players[playerTurn + 1].name;
+          next_player = listPlayer[playerTurn + 1].name;
         }
 
         $("#staticBackdropLabel").text("Chicken Boner!");
@@ -431,7 +431,7 @@ export default function Game() {
   }
 
   function KickCurrentPlayer(late) {
-    if (listPlayer == 0) listPlayer = players;
+    //if (listPlayer == 0) listPlayer = players;
     //if the remaining player is the last one standing, declare victory
     console.log("List Player len", listPlayer.length);
     if (listPlayer.length - 1 === 1) {
@@ -475,7 +475,7 @@ export default function Game() {
     listPlayer = listPlayer.filter((player, index) => index != playerTurn);
 
     //if kicked player is the last player in the queue, go to first player in the queue
-    if (playerTurn >= listPlayer.length) {
+    if (playerTurn > listPlayer.length) {
       playerTurn = 0;
     }
   }
@@ -524,6 +524,8 @@ export default function Game() {
   }
 
   function bone_clicked(obj) {
+    if (listPlayer == 0) listPlayer = players;
+
     obj.src = bone_hidden;
 
     let idName = "#" + obj.id;
@@ -798,9 +800,10 @@ export default function Game() {
       navigate("/");
       return;
     }
-    listPlayer = location.state.players;
+    const playerList = location.state.players;
     show_modal("audio_prompt");
-    setPlayers(listPlayer);
+    setPlayers(playerList);
+    listPlayer = playerList;
   }, []);
 
   useEffect(() => {
