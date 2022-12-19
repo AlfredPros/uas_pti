@@ -46,7 +46,7 @@ export default function Game() {
 
   // Table Bone vars
   const [temp, setTemp] = useState("");
-  const [picked_correct_bone, setPicked_correct_bone] = useState(0);
+  const [picked_correct_bone, setPickedCorrectBone] = useState(0);
   const [win, setWin] = useState(false);
 
   const [playerScores, setPlayerScores] = useState([]);
@@ -439,18 +439,22 @@ export default function Game() {
     }
   }
 
+  var picked_correct_boner = 0;
   function safer_boners_selected() {
-    setPicked_correct_bone(picked_correct_bone + 1);
-    console.log("saferboneselected " + picked_correct_bone);
+    let curr = picked_correct_boner + 1;
+    picked_correct_boner = curr;
+
+    // State is unreliable for this, so we use vanilla
+    console.log("picked_correct_bone " + picked_correct_boner);
     // Update player score
-    $("#" + players[playerTurn].name + "scoreboard span").html(
-      ++playerScores[playerTurn]
-    );
+    //$("#" + players[playerTurn].name + "scoreboard span").html(
+    //  ++playerScores[playerTurn]
+    //);
     //setPlayerScores(...)
 
     // Check if all corect bones are picked
     let num = players.length;
-    if (picked_correct_bone == num * 3) {
+    if (picked_correct_boner === num * 3) {
       //stop the timer and declare victory
       setTimerToggle(0);
       setWin(true);
