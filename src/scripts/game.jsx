@@ -427,7 +427,7 @@ export default function Game() {
     if (playerTurn == 0) {
       setPlayers(players.splice(1, players.length - 1));
     } else if (playerTurn == players.length - 1) {
-      setPlayers((players = players.splice(0, players.length - 1)));
+      setPlayers((players.splice(0, players.length - 1)));
     } else {
       players.splice(playerTurn, 1);
       console.log("current players:");
