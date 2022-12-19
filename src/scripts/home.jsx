@@ -26,7 +26,7 @@ export default function Home() {
       }
     }
     setName("");
-    setPlayers([...players, { name: name, play_status: true }]);
+    setPlayers([...players, { name: name, score: 0}]);
     console.log(players);
   }
 

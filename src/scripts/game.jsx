@@ -33,6 +33,7 @@ export default function Game() {
   // Player
   const [players, setPlayers] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(0);
+  // const [playerScores, setPlayerScores] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -52,7 +53,6 @@ export default function Game() {
   const [win, setWin] = useState(false);
 
   const [dangerous_boners, setDangerous_boners] = useState([]);
-  const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
   // Function to show the appropriate modal prompt.
@@ -394,7 +394,6 @@ export default function Game() {
       ++playerScores[playerTurn]
     );
     //setPlayerScores(...)
-
     // Check if all corect bones are picked
     if (picked_correct_bone == num * 3) {
       //stop the timer and declare victory
@@ -445,9 +444,9 @@ export default function Game() {
   }
 
   function initializeBones() {
-    let playerScoresTemp = [];
-    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    setPlayerScores(playerScoresTemp);
+    // let playerScoresTemp = [];
+    // for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    // setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
     let dangerBonerTemp = [];
@@ -569,15 +568,11 @@ export default function Game() {
       navigate("/");
       return;
     }
-    const playerList = location.state.players.map((object) => object.name);
-    console.log(playerList);
-    setPlayers(playerList, playerList);
-    console.log("Players");
-    console.log(players);
-    show_modal("audio_prompt");
+    const playerList = location.state.players;
+    // console.log(playerList);
+    setPlayers(playerList);
     initializeBones();
   }, []);
-
   return (
     <>
       {
@@ -627,7 +622,12 @@ export default function Game() {
             <div
               id="player-list"
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
-            ></div>
+              >
+              {console.log(players)}
+              {players.map((player, index) => (
+                <p key={index} id={player.name + "scoreboard"}>{player.name}  <span>{player.score}</span></p>
+              ))}
+            </div>
           </div>
 
           <div className="col-md-6 col-sm-12 text-center justify-content-center order-3">
