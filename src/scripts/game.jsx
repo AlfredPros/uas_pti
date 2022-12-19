@@ -47,8 +47,7 @@ import mistDay from "../resources/weather/50d@4x.png";
 import mistNight from "../resources/weather/50n@4x.png";
 
 import spike_sleep from "../resources/spike_sleep.png";
-import spike_awake from "../resources/spike_awake.png";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
@@ -57,9 +56,6 @@ export default function Game() {
   var playerTurn = 0;
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Audio vars
-  const [mute, setMute] = useState(false);
 
   // Timer vars
   // const [seconds, setSeconds] = useState(10);
@@ -71,8 +67,6 @@ export default function Game() {
   var late = false;
 
   // Table Bone vars
-  const [temp, setTemp] = useState("");
-  const [win, setWin] = useState(false);
   const [tableCreated, setTableCreated] = useState(false);
 
   // API Variables
@@ -259,14 +253,9 @@ export default function Game() {
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
-    //enlarge dog
-
+    //ensmall dog
     $("#dog").css("transition", "0.5s ease-in-out");
     $("#dog").css("transform", "scale(1.0)");
-
-    //if (doge != null) {
-    //  doge.src = dogeImg; //spike_sleep;
-    //}
 
     // Hide backdrop
     $(".modal-backdrop").remove();
@@ -281,17 +270,14 @@ export default function Game() {
     if (track.muted === false) {
       mute_btn.src = muted;
       track.muted = true;
-      setMute(true);
     } else if (track.muted === true) {
       mute_btn.src = unmuted;
       track.muted = false;
-      setMute(false);
     } else alert("Error occured!");
   }
 
   // Music Function
   function play_music(mute_init = false) {
-    setMute(false);
     $("#background_music")[0].play();
 
     if (mute_init == true) mute_func();
@@ -403,17 +389,8 @@ export default function Game() {
     document.getElementById("timer").style.color = "#ff0000";
 
     //Doge expands, hide bone
-    let doge = document.getElementById("dog");
-
-    // doge.style = {
-    //   width: "100%",
-    //   transition: "0.25s ease-in-out",
-    //   transform: "scale(2.5)",
-    // };
-
     $("#dog").css("transition", "0.25s ease-in-out");
     $("#dog").css("transform", "scale(2.5)");
-    // doge.src = dogeImg; //spike_awake;
 
     //change score board color to red
     $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
@@ -496,7 +473,6 @@ export default function Game() {
     if (picked_correct_boner === num * 3) {
       //stop the timer and declare victory
       timerToggle = 0;
-      setWin(true);
       show_modal("player_tied");
       // change footer
       $("#footer_text").text("EVERYONE THAT SURVIVED WINS!!!!!");
@@ -538,10 +514,6 @@ export default function Game() {
 
   function initializeBones() {
     if (players.length > 5) return;
-
-    //let playerScoresTemp = [];
-    //for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    //setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
     let num = players.length;
@@ -786,6 +758,7 @@ export default function Game() {
 
         let weatherLogo = document.getElementById("weather_logo");
         weatherLogo.src = weatherIcon;
+        weatherLogo.alt = weatherMain;
 
         console.log("Fetch weather success!");
       });
