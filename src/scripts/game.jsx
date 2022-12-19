@@ -441,22 +441,22 @@ export default function Game() {
   var picked_correct_boner = 0;
   function safer_boners_selected() {
     console.log(players.length);
-    setPicked_correct_bone(picked_correct_bone + 1);
-    console.log("saferboneselected " + picked_correct_bone);
+    picked_correct_boner++;
+    console.log("saferboneselected " + picked_correct_boner);
     console.log("Player Turn: " + playerTurn);
-    setPlayers(currentPlayers => (
-      currentPlayers.map((player, index) =>  {
-        let comp = playerTurn-1;
-        // if (playerTurn < 0) 
+    setPlayers((currentPlayers) =>
+      currentPlayers.map((player, index) => {
+        let comp = playerTurn - 1;
+        // if (playerTurn < 0)
         if (comp < 0) comp = 3;
-        console.log(comp)
+        console.log(comp);
         if (index === comp) {
           console.log(index);
-          return {...player, score: player.score + 1}
-        } 
+          return { ...player, score: player.score + 1 };
+        }
         return player;
       }, next_player())
-    ), );
+    );
 
     // Check if all corect bones are picked
     let num = players.length;
@@ -480,7 +480,7 @@ export default function Game() {
   }
 
   function next_player() {
-    playerTurn = (playerTurn + 1) % (players.length);
+    playerTurn = (playerTurn + 1) % players.length;
   }
 
   function bone_clicked(obj) {
@@ -505,10 +505,12 @@ export default function Game() {
 
   function initializeBones() {
     let playerScoresTemp = [];
-    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    setPlayerScores(playerScoresTemp);
+    //for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    //setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
+    let num = players.length;
+    let spacing = 1 / num;
     let dangerBonerTemp = [];
     for (let i = 0; dangerBonerTemp.length < num; i++) {
       // Generate Random Number between 0 and 4*number of players
