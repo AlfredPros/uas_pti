@@ -46,7 +46,6 @@ export default function Game() {
 
   // Table Bone vars
   const [temp, setTemp] = useState("");
-  const [picked_correct_bone, setPickedCorrectBone] = useState(0);
   const [win, setWin] = useState(false);
 
   const [playerScores, setPlayerScores] = useState([]);
