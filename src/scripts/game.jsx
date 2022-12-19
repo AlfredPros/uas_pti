@@ -32,7 +32,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function Game() {
   // Player
   const [players, setPlayers] = useState(["a", "b", "c", "d"]);
-  const [playerTurn, setPlayerTurn] = useState(0);
+  var playerTurn = 0;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export default function Game() {
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
-  const [playerScores, setPlayerScores] = useState([]);
+  // const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
   // Function to show the appropriate modal prompt.
@@ -440,13 +440,23 @@ export default function Game() {
   }
 
   function safer_boners_selected() {
+    console.log(players.length);
     setPicked_correct_bone(picked_correct_bone + 1);
     console.log("saferboneselected " + picked_correct_bone);
-    // Update player score
-    $("#" + players[playerTurn].name + "scoreboard span").html(
-      ++playerScores[playerTurn]
-    );
-    //setPlayerScores(...)
+    console.log("Player Turn: " + playerTurn);
+    setPlayers(currentPlayers => (
+      currentPlayers.map((player, index) =>  {
+        let comp = playerTurn-1;
+        // if (playerTurn < 0) 
+        if (comp < 0) comp = 3;
+        console.log(comp)
+        if (index === comp) {
+          console.log(index);
+          return {...player, score: player.score + 1}
+        } 
+        return player;
+      }, next_player())
+    ), );
 
     // Check if all corect bones are picked
     let num = players.length;
@@ -466,18 +476,11 @@ export default function Game() {
       // Randomize sound
       let rand = randint(4) + 1;
       play_sound("bone" + rand);
-
-      //next player's turn
-      next_player_turn();
     }
   }
 
-  function next_player_turn() {
-    if (playerTurn == players.length - 1) {
-      setPlayerTurn(0);
-    } else {
-      setPlayerTurn(playerTurn + 1);
-    }
+  function next_player() {
+    playerTurn = (playerTurn + 1) % (players.length);
   }
 
   function bone_clicked(obj) {
@@ -503,9 +506,9 @@ export default function Game() {
   function initializeBones() {
     let num = players.length;
     let spacing = 1.0 / num;
-    let playerScoresTemp = [];
-    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    setPlayerScores(playerScoresTemp);
+    // let playerScoresTemp = [];
+    // for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    // setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
     let dangerBonerTemp = [];
