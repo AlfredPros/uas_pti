@@ -57,15 +57,12 @@ export default function Game() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Timer vars
-  // const [seconds, setSeconds] = useState(10);
   var seconds = 10;
-  // const [miliSeconds, setMiliSeconds] = useState(60);
   var miliSeconds = 60;
+  var listPlayer;
   const [timerToggle, setTimerToggle] = useState(false);
 
   const calculateTimeLeft = () => {
-    // const difference = 10000;
     let time = {};
     time = {
       seconds: Math.floor((difference / 1000) % 60),
@@ -96,7 +93,6 @@ export default function Game() {
       }, 10);
     if (timeLeft.seconds <= 0) KickCurrentPlayer((late = true));
   }, [timerToggle, timeLeft]);
-  // var timerToggle = 0;
   var late = false;
 
   // Table Bone vars
@@ -106,7 +102,6 @@ export default function Game() {
   var dogeImg = { spike_sleep };
   var weatherIcon = clearSkyDay;
   var weatherMain = "Clear";
-
   // const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
@@ -436,9 +431,8 @@ export default function Game() {
 
   function KickCurrentPlayer(late) {
     //if the remaining player is the last one standing, declare victory
-    let playerLength = players.length;
-    console.log("PlayerLength", playerLength);
-    if (playerLength - 1 === 1) {
+    console.log("List Player", listPlayer);
+    if (listPlayer.length - 1 === 1) {
       play_sound("victory1");
       // change footer
       $("#footer_text").text("YOU WON!!!!!");
@@ -446,10 +440,10 @@ export default function Game() {
     } else {
       if (late == true) {
         //change score board color to red
-        $("#" + players[playerTurn].name + "scoreboard").css(
-          "color",
-          "#ff0000"
-        );
+        // $("#" + players[playerTurn].name + "scoreboard").css(
+        //   "color",
+        //   "#ff0000"
+        // );
         // change footer
         $("#footer_text").text("YOU RAN OUT OF TIME!!!!!");
         play_sound("doge5");
@@ -476,9 +470,10 @@ export default function Game() {
     setPlayers((currentPlayer) => {
       return currentPlayer.filter((player, index) => index != playerTurn);
     });
+    listPlayer = listPlayer.filter((player, index) => index != playerTurn);
 
     //if kicked player is the last player in the queue, go to first player in the queue
-    if (playerTurn >= players.length) {
+    if (playerTurn >= listPlayer.length) {
       playerTurn = 0;
     }
   }
@@ -802,6 +797,9 @@ export default function Game() {
       return;
     }
     const playerList = location.state.players;
+    listPlayer = playerList;
+    // console.log("ListPlayer");
+    // console.log(listPlayer);
     show_modal("audio_prompt");
     setPlayers(playerList);
   }, []);
