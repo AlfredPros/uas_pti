@@ -1,11 +1,12 @@
 import "../styles/stylesHome.css";
 import dogLogo from "../resources/spike_logo.png";
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [players, setPlayers] = useState([]);
   const inputRef = useRef(null);
-
+  const navigate = useNavigate();
   function showPlayerList() {
     $("#playerList").empty();
     for (let i = 0; i < players.length; i++) {
@@ -25,14 +26,14 @@ export default function Home() {
       return;
     }
     for (let i = 0; i < players.length; i++) {
-      if (players[i].name == player_name) {
+      if (players[i].name === player_name) {
         alert("Player already exists");
         return;
       }
     }
     var player = {
       name: player_name,
-      play_status: true,
+      play_status: true
     };
     let newPlayers = players;
     newPlayers.push(player);
@@ -44,19 +45,30 @@ export default function Home() {
   }
 
   function insert_player() {
-    if (players.length == 0) {
+    if (players.length === 0) {
       document.getElementById("insertplayer").innerHTML = "Insert 1st player";
-    } else if (players.length == 1) {
+    } else if (players.length === 1) {
       document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
-    } else if (players.length == 2) {
+    } else if (players.length === 2) {
       document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
-    } else if (players.length == 3) {
+    } else if (players.length === 3) {
       document.getElementById("insertplayer").innerHTML = "Insert 4th player";
-    } else if (players.length == 4) {
+    } else if (players.length === 4) {
       document.getElementById("insertplayer").innerHTML = "Insert 5th player";
     } else {
       document.getElementById("insertplayer").innerHTML = "Player is full";
     }
+  }
+
+  function playGame() {
+    if (players.length < 2) {
+      alert("Must be more than one player!!!");
+      return;
+    }
+
+    navigate("/game", {
+      state: { players }
+    });
   }
 
   return (
@@ -125,14 +137,7 @@ export default function Home() {
           </button>
           <button
             id="playButton"
-            onClick={() => {
-              if (players.length < 2) {
-                alert("Must be more than one player!!!");
-                return;
-              }
-              sessionStorage.setItem("players", JSON.stringify(players));
-              window.location.href = "game.html";
-            }}
+            onClick={playGame}
             style={{ width: "12rem" }}
             className="button btn-primary btn-block btn-1"
           >
