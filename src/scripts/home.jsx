@@ -75,7 +75,7 @@ export default function Home() {
 
         <div id="player" className="d-flex align-items-center playerDIV">
           <p style={{ paddingBlock: "auto" }} id="insertplayer">
-            Insert Player #{players.length + 1}
+            {players.length < 5 ? "Insert Player #" + (players.length + 1) : "Game Full !!!"}
           </p>
         </div>
 
