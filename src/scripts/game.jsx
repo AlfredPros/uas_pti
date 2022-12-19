@@ -393,7 +393,7 @@ export default function Game() {
     $("#dog").css("transform", "scale(2.5)");
 
     //change score board color to red
-    $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
+    //$("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
 
     //KickCurrentPlayer
     KickCurrentPlayer();
@@ -433,15 +433,10 @@ export default function Game() {
     }
 
     //remove current player
-    if (playerTurn == 0) {
-      setPlayers(players.splice(1, players.length - 1));
-    } else if (playerTurn == players.length - 1) {
-      setPlayers(players.splice(0, players.length - 1));
-    } else {
-      players.splice(playerTurn, 1);
-      console.log("current players:");
-      console.log(players);
-    }
+    setPlayers((currentPlayer) => {
+      return currentPlayer.filter((player, index) => index != playerTurn);
+    });
+
     //if kicked player is the last player in the queue, go to first player in the queue
     if (playerTurn >= players.length) {
       playerTurn = 0;
@@ -458,7 +453,7 @@ export default function Game() {
       currentPlayers.map((player, index) => {
         let comp = playerTurn - 1;
         // if (playerTurn < 0)
-        if (comp < 0) comp = 3;
+        if (comp < 0) comp = players.length - 1;
         console.log(comp);
         if (index === comp) {
           console.log(index);
