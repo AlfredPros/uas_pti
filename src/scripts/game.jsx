@@ -52,6 +52,7 @@ export default function Game() {
   const [temp, setTemp] = useState("");
   const [win, setWin] = useState(false);
   const [tableCreated, setTableCreated] = useState(false);
+  var dogeImg = { spike_sleep };
 
   // const [playerScores, setPlayerScores] = useState([]);
 
@@ -227,7 +228,7 @@ export default function Game() {
     //reset and start the timer
     seconds = 9;
     miliSeconds = 99;
-    timerToggle = 1
+    timerToggle = 1;
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
@@ -241,9 +242,9 @@ export default function Game() {
       transform: "scale(1.0)",
     };
     */
-    if (doge != null) {
-      doge.src = spike_sleep;
-    }
+    //if (doge != null) {
+    //  doge.src = dogeImg; //spike_sleep;
+    //}
 
     // Hide backdrop
     $(".modal-backdrop").remove();
@@ -385,7 +386,7 @@ export default function Game() {
     //   transform: "scale(2.5)",
     // };
 
-    doge.src = spike_awake;
+    //doge.src = dogeImg; //spike_awake;
 
     //change score board color to red
     $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
@@ -431,7 +432,7 @@ export default function Game() {
     if (playerTurn == 0) {
       setPlayers(players.splice(1, players.length - 1));
     } else if (playerTurn == players.length - 1) {
-      setPlayers((players.splice(0, players.length - 1)));
+      setPlayers(players.splice(0, players.length - 1));
     } else {
       players.splice(playerTurn, 1);
       console.log("current players:");
@@ -579,9 +580,14 @@ export default function Game() {
           }
           if (j == 0 && i == 1) {
             // Dog: id="dog"
-            fetch('https://dog.ceo/api/breed/shiba/images/random') 
-              .then({"message":"https:\/\/images.dog.ceo\/breeds\/shiba\/shiba-10.jpg","status":"success"});
-              
+            temp +=
+              '<td colspan="' +
+              num +
+              '" rowspan="' +
+              num +
+              '"> <img src=' +
+              dogeImg +
+              ' style="width:100%" id="dog" draggable="false" oncontextmenu="return false"/></td>';
           }
         } else {
           // Footer
@@ -612,7 +618,7 @@ export default function Game() {
 
       $("#game-content").append(temp);
     }
-    
+
     // Set bone functions
     for (let i = 0; i < num * 4; i++) {
       let idName = "#bone" + i;
@@ -628,6 +634,21 @@ export default function Game() {
   }
 
   useEffect(() => {
+    // Fetch doge
+    const url = "https://dog.ceo/api/breed/shiba/images/random";
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status != "success") {
+          console.log("Fetch failed");
+        } else {
+          dogeImg = data.message;
+          let doge = document.getElementById("dog");
+          doge.src = data.message;
+          console.log("Fetch success! ", data.message);
+        }
+      });
+
     if (location.state == null) {
       navigate("/");
       return;
@@ -635,70 +656,65 @@ export default function Game() {
     const playerList = location.state.players;
     show_modal("audio_prompt");
     setPlayers(playerList);
-    
+
     $(document).ready(function () {
+      //set a function to run every 0.01 second
+      setInterval(function () {
+        //update timer and turn variables
+        if (timerToggle > 0) {
+          miliSeconds--;
+          if (miliSeconds < 0) {
+            miliSeconds = 99;
+            seconds--;
+            if (seconds < 0) {
+              seconds = 9;
+              KickCurrentPlayer((late = true));
+              timerToggle = 0;
+              if (playerTurn >= players.length - 1) {
+                playerTurn = 0;
+              }
+            }
+          }
+        }
 
-            //set a function to run every 0.01 second
-            setInterval(function () {
-
-                //update timer and turn variables
-                if (timerToggle > 0) {
-                    miliSeconds--;
-                    if (miliSeconds < 0) {
-                        miliSeconds = 99;
-                        seconds--;
-                        if (seconds < 0) {
-                            seconds = 9;
-                            KickCurrentPlayer(late = true);
-                            timerToggle = 0;
-                            if (playerTurn >= players.length - 1) {
-                                playerTurn = 0;
-                            }
-                        }
-                    }
-                }
-
-                //update the user interface
-                $("#player-turn").html(players[playerTurn].name);
-                if (seconds < 10) {
-                    if (seconds < 5) {
-                        if (miliSeconds < 10) {
-                            $("#timer").html("0" + seconds + ":0" + miliSeconds);
-                            document.getElementById("timer").style.color = "#ff0000";
-                        } else {
-                            $("#timer").html("0" + seconds + ":" + miliSeconds);
-                            document.getElementById("timer").style.color = "#ff0000";
-                        }
-                        /*
+        //update the user interface
+        $("#player-turn").html(players[playerTurn].name);
+        if (seconds < 10) {
+          if (seconds < 5) {
+            if (miliSeconds < 10) {
+              $("#timer").html("0" + seconds + ":0" + miliSeconds);
+              document.getElementById("timer").style.color = "#ff0000";
+            } else {
+              $("#timer").html("0" + seconds + ":" + miliSeconds);
+              document.getElementById("timer").style.color = "#ff0000";
+            }
+            /*
                         if(seconds == 0 && miliSeconds == 0){
                             $("#timer").html("00" + ":" + "00");
                             timerToggle = 0;
                             KickCurrentPlayer();
                         }
                         */
-                    } else {
-                        if (miliSeconds < 10) {
-                            $("#timer").html("0" + seconds + ":0" + miliSeconds);
-                            document.getElementById("timer").style.color = "#000";
-                        } else {
-                            $("#timer").html("0" + seconds + ":" + miliSeconds);
-                            document.getElementById("timer").style.color = "#000";
-                        }
-                    }
-
-                } else {
-                    if (miliSeconds < 10) {
-                        $("#timer").html("0" + seconds + ":0" + miliSeconds);
-                        document.getElementById("timer").style.color = "#ff0000";
-                    } else {
-                        $("#timer").html("0" + seconds + ":" + miliSeconds);
-                        document.getElementById("timer").style.color = "#ff0000";
-                    }
-                }
-
-            }, 10);
-
-        })
+          } else {
+            if (miliSeconds < 10) {
+              $("#timer").html("0" + seconds + ":0" + miliSeconds);
+              document.getElementById("timer").style.color = "#000";
+            } else {
+              $("#timer").html("0" + seconds + ":" + miliSeconds);
+              document.getElementById("timer").style.color = "#000";
+            }
+          }
+        } else {
+          if (miliSeconds < 10) {
+            $("#timer").html("0" + seconds + ":0" + miliSeconds);
+            document.getElementById("timer").style.color = "#ff0000";
+          } else {
+            $("#timer").html("0" + seconds + ":" + miliSeconds);
+            document.getElementById("timer").style.color = "#ff0000";
+          }
+        }
+      }, 10);
+    });
   }, []);
 
   useEffect(() => {
