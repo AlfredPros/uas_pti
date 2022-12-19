@@ -1,17 +1,18 @@
 import "../styles/stylesHome.css";
 import dogLogo from "../resources/spike_logo.png";
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [players, setPlayers] = useState([]);
   const inputRef = useRef(null);
-
-  function showPlayerList() {
-    $("#playerList").empty();
-    for (let i = 0; i < players.length; i++) {
-      $("#playerList").append("<li>" + players[i].name + "</li>");
-    }
-  }
+  const navigate = useNavigate();
+  // function showPlayerList() {
+  //   $("#playerList").empty();
+  //   for (let i = 0; i < players.length; i++) {
+  //     $("#playerList").append("<li>" + players[i].name + "</li>");
+  //   }
+  // }
 
   function addPlayer() {
     if (players.length >= 5) {
@@ -25,38 +26,49 @@ export default function Home() {
       return;
     }
     for (let i = 0; i < players.length; i++) {
-      if (players[i].name == player_name) {
+      if (players[i].name === player_name) {
         alert("Player already exists");
         return;
       }
     }
     var player = {
       name: player_name,
-      play_status: true,
+      play_status: true
     };
     let newPlayers = players;
     newPlayers.push(player);
     setPlayers(newPlayers);
-    console.log(players);
+    // console.log(players);
     $("#playerInput").val("");
-    showPlayerList();
-    insert_player();
+    // showPlayerList();
+    // insert_player();
   }
 
-  function insert_player() {
-    if (players.length == 0) {
-      document.getElementById("insertplayer").innerHTML = "Insert 1st player";
-    } else if (players.length == 1) {
-      document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
-    } else if (players.length == 2) {
-      document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
-    } else if (players.length == 3) {
-      document.getElementById("insertplayer").innerHTML = "Insert 4th player";
-    } else if (players.length == 4) {
-      document.getElementById("insertplayer").innerHTML = "Insert 5th player";
-    } else {
-      document.getElementById("insertplayer").innerHTML = "Player is full";
+  // function insert_player() {
+  //   if (players.length === 0) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 1st player";
+  //   } else if (players.length === 1) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
+  //   } else if (players.length === 2) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
+  //   } else if (players.length === 3) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 4th player";
+  //   } else if (players.length === 4) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 5th player";
+  //   } else {
+  //     document.getElementById("insertplayer").innerHTML = "Player is full";
+  //   }
+  // }
+
+  function playGame() {
+    if (players.length < 2) {
+      alert("Must be more than one player!!!");
+      return;
     }
+
+    navigate("/game", {
+      state: { players }
+    });
   }
 
   return (
@@ -125,14 +137,7 @@ export default function Home() {
           </button>
           <button
             id="playButton"
-            onClick={() => {
-              if (players.length < 2) {
-                alert("Must be more than one player!!!");
-                return;
-              }
-              sessionStorage.setItem("players", JSON.stringify(players));
-              window.location.href = "game.html";
-            }}
+            onClick={playGame}
             style={{ width: "12rem" }}
             className="button btn-primary btn-block btn-1"
           >
@@ -142,7 +147,9 @@ export default function Home() {
 
         <div className="m-3 px-5 boxplayer rounded ">
           <p id="player">Player List</p>
-          <ol id="playerList" style={{ paddingLeft: "0px" }}></ol>
+          <ol id="playerList" style={{ paddingLeft: "0px" }}>
+            {/* TODO: ADD RENDERING */}
+          </ol>
         </div>
       </div>
     </div>
