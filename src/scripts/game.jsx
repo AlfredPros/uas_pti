@@ -40,8 +40,8 @@ export default function Game() {
   const [mute, setMute] = useState(false);
 
   // Timer vars
-  const [seconds, setSeconds] = useState(0);
-  const [miliSeconds, setMiliSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(10);
+  const [miliSeconds, setMiliSeconds] = useState(60);
   const [timerToggle, setTimerToggle] = useState(0);
 
   // Table Bone vars
