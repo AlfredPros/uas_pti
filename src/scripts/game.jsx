@@ -144,6 +144,7 @@ export default function Game() {
       }
 
       case "player_lose": {
+        console.log(players);
         let curr_player = players[playerTurn].name;
 
         $("#staticBackdropLabel").text("Spike Has Woken Up!");
@@ -488,7 +489,7 @@ export default function Game() {
       currentPlayers.map((player, index) => {
         let comp = playerTurn - 1;
         // if (playerTurn < 0)
-        if (comp < 0) comp = players.length - 1;
+        if (comp < 0) comp = listPlayer.length - 1;
         console.log(comp);
         if (index === comp) {
           return { ...player, score: player.score + 1 };
@@ -519,7 +520,7 @@ export default function Game() {
   }
 
   function next_player() {
-    playerTurn = (playerTurn + 1) % players.length;
+    playerTurn = (playerTurn + 1) % listPlayer.length;
   }
 
   function bone_clicked(obj) {
@@ -797,9 +798,9 @@ export default function Game() {
       navigate("/");
       return;
     }
-    const playerList = location.state.players;
+    listPlayer = location.state.players;
     show_modal("audio_prompt");
-    setPlayers(playerList);
+    setPlayers(listPlayer);
   }, []);
 
   useEffect(() => {
