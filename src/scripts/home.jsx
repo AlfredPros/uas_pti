@@ -1,6 +1,7 @@
 import "../styles/stylesHome.css";
 import dogLogo from "../resources/spike_logo.png";
-import React, { useState, useRef } from "react";
+import unknown from "../resources/unknown.png";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -26,7 +27,7 @@ export default function Home() {
       }
     }
     setName("");
-    setPlayers([...players, { name: name, score: 0}]);
+    setPlayers([...players, { name: name, score: 0 }]);
     console.log(players);
   }
 
@@ -37,9 +38,15 @@ export default function Home() {
     }
 
     navigate("/game", {
-      state: { players }
+      state: { players },
     });
   }
+
+  useEffect(() => {
+    // Reset everything back
+    $("body").css("background", "url(" + unknown + ")");
+    $("body").css("background-attachment", "fixed");
+  }, []);
 
   return (
     <div className="container-fluid mt-4">
@@ -75,7 +82,9 @@ export default function Home() {
 
         <div id="player" className="d-flex align-items-center playerDIV">
           <p style={{ paddingBlock: "auto" }} id="insertplayer">
-            {players.length < 5 ? "Insert Player #" + (players.length + 1) : "Game Full !!!"}
+            {players.length < 5
+              ? "Insert Player #" + (players.length + 1)
+              : "Game Full !!!"}
           </p>
         </div>
 

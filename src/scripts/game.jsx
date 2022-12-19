@@ -678,20 +678,22 @@ export default function Game() {
     let date = new Date();
     let hour = date.getHours();
     // Change background according to time
-    if (hour >= 18) {
+    if (hour >= 18 || hour < 5) {
       console.log("umnMalam");
-      $("body").css("background", "");
+      $("body").css("background", "none");
+      $("body").css("background", "url(" + umnMalam + ")");
     } else if (hour >= 11) {
       console.log("umnSiang");
-      $("body").css("background", { umnSiang });
+      $("body").css("background", "none");
+      $("body").css("background", "url(" + umnSiang + ")");
     } else if (hour >= 5) {
       console.log("umnPagi");
-      $("body").css("background", { umnPagi });
+      $("body").css("background", "none");
+      $("body").css("background", "url(" + umnPagi + ")");
     } else {
-      console.log("umnMalam");
-      $("body").removeAttr("style");
-      $("body").css("background", umnMalam);
+      console.log("Hour is outside range.");
     }
+    $("body").css("background-attachment", "fixed");
 
     // Fetch weather
     const urlWeather =

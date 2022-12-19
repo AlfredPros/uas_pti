@@ -1,29 +1,43 @@
 body {
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), url(../resources/unknown.png);
+    background: url(../resources/unknown.png);
     background-position: center;
     background-attachment: fixed;
     height: 100%;
-
-}
-
-@media screen and (max-width: 579px) {
+  }
+  
+  @media screen and (max-width: 579px) {
     #judul {
-        font-size: calc(5px + 7vw);
+      font-size: calc(5px + 7vw);
     }
-
+  
     #logo {
-        width: 20vw;
+      width: 20vw;
     }
-}
-
-/* For small screen user so that won't need to scroll down to view player list */
-@media screen and (max-width:487.5px) {
-    .myFlexContainer2 :nth-child(1) {order: 5;}
-    .myFlexContainer2 :nth-child(2) {order: 1;}
-    .myFlexContainer2 :nth-child(3) {order: 2;}
-    .myFlexContainer2 :nth-child(4) {order: 3;}
-    .myFlexContainer2 :nth-child(5) {order: 4;}
-
-    .myFlexContainer :nth-child(1) {order: 1;}
-    .myFlexContainer :nth-child(2) {order: 2;}
-}
+  }
+  
+  /* For small screen user so that won't need to scroll down to view player list */
+  @media screen and (max-width: 487.5px) {
+    .myFlexContainer2 :nth-child(1) {
+      order: 5;
+    }
+    .myFlexContainer2 :nth-child(2) {
+      order: 1;
+    }
+    .myFlexContainer2 :nth-child(3) {
+      order: 2;
+    }
+    .myFlexContainer2 :nth-child(4) {
+      order: 3;
+    }
+    .myFlexContainer2 :nth-child(5) {
+      order: 4;
+    }
+  
+    .myFlexContainer :nth-child(1) {
+      order: 1;
+    }
+    .myFlexContainer :nth-child(2) {
+      order: 2;
+    }
+  }
+  
