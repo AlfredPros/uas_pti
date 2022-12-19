@@ -106,7 +106,7 @@ export default function Game() {
             " has been moved out from the game for causing a ruckus.<br/>You can proceed without them or start a new game.</b>"
         );
         $("#staticBackdropFooter").append(
-          '<button type="button" class="button btn-primary btn-block btn-4" onclick="play_sound(\'confirm\'); continue_func()" data-bs-dismiss="modal" id="continue">Continue</button>'
+          '<button type="button" class="button btn-primary btn-block btn-4" data-bs-dismiss="modal" id="continue">Continue</button>'
         );
         $("#continue").click(function () {
           play_sound("confirm");
@@ -122,6 +122,7 @@ export default function Game() {
         });
 
         myModal.show();
+        $("iframe").remove();
         break;
       }
 
@@ -238,6 +239,13 @@ export default function Game() {
 
     // Hide backdrop
     $(".modal-backdrop").remove();
+    // let myModal = new bootstrap.Modal(
+    //   document.getElementById("staticBackdrop"),
+    //   {}
+    // );
+    // myModal.hide();
+    // $('iframe').remove();
+    // console.log("iframe")
   }
 
   /// Audio Functions
@@ -383,6 +391,55 @@ export default function Game() {
 
     //KickCurrentPlayer
     KickCurrentPlayer();
+  }
+
+  function KickCurrentPlayer(late = false) {
+    if (late == true) {
+      //change score board color to red
+      $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
+      // change footer
+      $("#footer_text").text("YOU RAN OUT OF TIME!!!!!");
+      play_sound("doge5");
+
+      show_modal("player_late");
+    }
+    // If player lost but there are player 2+ remaining
+    else {
+      // Randomize sound
+      let rand = randint(4) + 1;
+      play_sound("doge" + rand);
+      rand = randint(2);
+      if (rand == 0) play_sound("doge5");
+      else play_sound("doge6");
+
+      // change footer
+      $("#footer_text").text("YOU LOST!!!!!");
+
+      show_modal("player_lose");
+    }
+
+    //if the remaining player is the last one standing, declare victory
+    if (players.length - 1 == 1) {
+      play_sound("victory1");
+      // change footer
+      $("#footer_text").text("YOU WON!!!!!");
+      show_modal("player_win");
+    }
+
+    //remove current player
+    if (playerTurn == 0) {
+      setPlayers(players.splice(1, players.length - 1));
+    } else if (playerTurn == players.length - 1) {
+      setPlayers((players = players.splice(0, players.length - 1)));
+    } else {
+      players.splice(playerTurn, 1);
+      console.log("current players:");
+      console.log(players);
+    }
+    //if kicked player is the last player in the queue, go to first player in the queue
+    if (playerTurn >= players.length) {
+      playerTurn = 0;
+    }
   }
 
   function safer_boners_selected() {
