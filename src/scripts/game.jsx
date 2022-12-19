@@ -31,9 +31,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
   // Player
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState(["a", "b", "c", "d"]);
   const [playerTurn, setPlayerTurn] = useState(0);
-  // const [playerScores, setPlayerScores] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -52,7 +51,7 @@ export default function Game() {
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
-  const [dangerous_boners, setDangerous_boners] = useState([]);
+  const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
   // Function to show the appropriate modal prompt.
@@ -119,7 +118,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          navigate("/");
+          window.location.replace("index.html");
         });
 
         myModal.show();
@@ -152,7 +151,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          navigate("/");
+          window.location.replace("index.html");
         });
 
         myModal.show();
@@ -185,7 +184,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          navigate("/");
+          window.location.replace("index.html");
         });
 
         myModal.show();
@@ -206,7 +205,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("confirm");
-          navigate("/");
+          window.location.replace("index.html");
         });
 
         myModal.show();
@@ -451,6 +450,7 @@ export default function Game() {
       ++playerScores[playerTurn]
     );
     //setPlayerScores(...)
+
     // Check if all corect bones are picked
     if (picked_correct_bone == num * 3) {
       //stop the timer and declare victory
@@ -503,9 +503,9 @@ export default function Game() {
   }
 
   function initializeBones() {
-    // let playerScoresTemp = [];
-    // for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    // setPlayerScores(playerScoresTemp);
+    let playerScoresTemp = [];
+    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
     let dangerBonerTemp = [];
@@ -517,7 +517,6 @@ export default function Game() {
         dangerBonerTemp.push(x);
       }
     }
-    setDangerous_boners(dangerBonerTemp);
 
     // Generating bones
     let id = 0;
@@ -530,7 +529,7 @@ export default function Game() {
           // Header
           temp += '<th style="width: ' + spacing + '%">';
           if (!(j == 0 || j == num + 1)) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -551,7 +550,7 @@ export default function Game() {
         } else if (i !== num + 1) {
           // Content
           if (j == 0 || j == 1) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<td> <img class="dangerous_boners" src=' +
                 bone +
@@ -583,7 +582,7 @@ export default function Game() {
           // Footer
           temp += "<td>";
           if (!(j == 0 || j == num + 1)) {
-            if (dangerous_boners.includes(id)) {
+            if (dangerBonerTemp.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -632,6 +631,7 @@ export default function Game() {
     setPlayers(playerList);
     initializeBones();
   }, []);
+
   return (
     <>
       {
@@ -640,9 +640,11 @@ export default function Game() {
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-sm-12 col-md-1 offset-md-1">
-            <button className="button btn-primary btn-block btn-2" onClick={() => {navigate("/")}}>
+            <a href="index.html">
+              <button className="button btn-primary btn-block btn-2">
                 Back
-            </button>
+              </button>
+            </a>
           </div>
           <div className="col-md-8 text-center">
             <h2 className="text-center" id="judul">
@@ -681,11 +683,11 @@ export default function Game() {
             <div
               id="player-list"
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
-              >
-              {console.log(players)}
+            >
               {players.map((player, index) => (
                 <p key={index} id={player.name + "scoreboard"}>{player.name}  <span>{player.score}</span></p>
               ))}
+
             </div>
           </div>
 
@@ -720,7 +722,6 @@ export default function Game() {
               onContextMenu={() => {
                 return false;
               }}
-              alt="mute"
             />
             <audio src={background_music} id="background_music" loop>
               music bgm
