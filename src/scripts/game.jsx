@@ -69,23 +69,31 @@ export default function Game() {
     let time = {};
     time = {
       seconds: Math.floor((difference / 1000) % 60),
-      milliseconds: Math.floor((difference / 1000) % 600)
+      milliseconds: Math.floor((difference / 1000) % 600),
     };
     return time;
   };
 
-  const [timeLeft, setTimeLeft] = useState({seconds: 9, milliseconds: 999});
+  const [timeLeft, setTimeLeft] = useState({ seconds: 9, milliseconds: 999 });
 
   useEffect(() => {
-    timeLeft.seconds > 0 && timerToggle && setTimeout(() => {
-      setTimeLeft(prevTime => {
-        if (prevTime.milliseconds < 10) {
-          const difference = 10 - prevTime.milliseconds;
-          return {seconds: prevTime.seconds - 1, milliseconds: 999 - difference}
-        }
-        return {seconds: prevTime.seconds, milliseconds: prevTime.milliseconds - 10};
-      });
-    }, 10);
+    timeLeft.seconds > 0 &&
+      timerToggle &&
+      setTimeout(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime.milliseconds < 10) {
+            const difference = 10 - prevTime.milliseconds;
+            return {
+              seconds: prevTime.seconds - 1,
+              milliseconds: 999 - difference,
+            };
+          }
+          return {
+            seconds: prevTime.seconds,
+            milliseconds: prevTime.milliseconds - 10,
+          };
+        });
+      }, 10);
     if (timeLeft.seconds <= 0) KickCurrentPlayer((late = true));
   }, [timerToggle, timeLeft]);
   // var timerToggle = 0;
@@ -274,7 +282,7 @@ export default function Game() {
     seconds = 9;
     miliSeconds = 99;
     // timerToggle = 1;
-    setTimeLeft({seconds: 9, milliseconds: 999});
+    setTimeLeft({ seconds: 9, milliseconds: 999 });
     setTimerToggle(true);
 
     // reset footer
@@ -427,36 +435,41 @@ export default function Game() {
   }
 
   function KickCurrentPlayer(late) {
-    if (late == true) {
-      //change score board color to red
-      $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
-      // change footer
-      $("#footer_text").text("YOU RAN OUT OF TIME!!!!!");
-      play_sound("doge5");
-
-      show_modal("player_late");
-    }
-    // If player lost but there are player 2+ remaining
-    else {
-      // Randomize sound
-      let rand = randint(4) + 1;
-      play_sound("doge" + rand);
-      rand = randint(2);
-      if (rand == 0) play_sound("doge5");
-      else play_sound("doge6");
-
-      // change footer
-      $("#footer_text").text("YOU LOST!!!!!");
-
-      show_modal("player_lose");
-    }
-
     //if the remaining player is the last one standing, declare victory
-    if (players.length - 1 == 1) {
+    let playerLength = players.length;
+    console.log("PlayerLength", playerLength);
+    if (playerLength - 1 === 1) {
       play_sound("victory1");
       // change footer
       $("#footer_text").text("YOU WON!!!!!");
       show_modal("player_win");
+    } else {
+      if (late == true) {
+        //change score board color to red
+        $("#" + players[playerTurn].name + "scoreboard").css(
+          "color",
+          "#ff0000"
+        );
+        // change footer
+        $("#footer_text").text("YOU RAN OUT OF TIME!!!!!");
+        play_sound("doge5");
+
+        show_modal("player_late");
+      }
+      // If player lost but there are player 2+ remaining
+      else {
+        // Randomize sound
+        let rand = randint(4) + 1;
+        play_sound("doge" + rand);
+        rand = randint(2);
+        if (rand == 0) play_sound("doge5");
+        else play_sound("doge6");
+
+        // change footer
+        $("#footer_text").text("YOU LOST!!!!!");
+
+        show_modal("player_lose");
+      }
     }
 
     //remove current player
@@ -472,7 +485,7 @@ export default function Game() {
 
   var picked_correct_boner = 0;
   function safer_boners_selected() {
-    setTimeLeft({seconds: 9, milliseconds: 999});
+    setTimeLeft({ seconds: 9, milliseconds: 999 });
     console.log(players.length);
     picked_correct_boner++;
     setPlayers((currentPlayers) =>
@@ -791,7 +804,7 @@ export default function Game() {
     const playerList = location.state.players;
     show_modal("audio_prompt");
     setPlayers(playerList);
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (tableCreated === false) initializeBones();
@@ -857,16 +870,15 @@ export default function Game() {
             <p>
               Turns: <span id="player-turn">1</span>
             </p>
-              {timeLeft.seconds ? (
-                  <p>
-                    <span>{timeLeft.seconds}</span>
-                    <span>:</span>
-                    <span>{timeLeft.milliseconds}</span>
-                  </p>
-                ) : (
-                  <p>Time is up 🔥</p>
-                )
-              }
+            {timeLeft.seconds ? (
+              <p>
+                <span>{timeLeft.seconds}</span>
+                <span>:</span>
+                <span>{timeLeft.milliseconds}</span>
+              </p>
+            ) : (
+              <p>Time is up 🔥</p>
+            )}
             <div
               id="player-list"
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
