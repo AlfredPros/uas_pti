@@ -59,7 +59,7 @@ export default function Game() {
 
   var seconds = 10;
   var miliSeconds = 60;
-  var listPlayer;
+  var listPlayer = [];
   const [timerToggle, setTimerToggle] = useState(false);
 
   const calculateTimeLeft = () => {
@@ -430,8 +430,9 @@ export default function Game() {
   }
 
   function KickCurrentPlayer(late) {
+    if (listPlayer == 0) listPlayer = players;
     //if the remaining player is the last one standing, declare victory
-    console.log("List Player", listPlayer);
+    console.log("List Player len", listPlayer.length);
     if (listPlayer.length - 1 === 1) {
       play_sound("victory1");
       // change footer
@@ -797,9 +798,6 @@ export default function Game() {
       return;
     }
     const playerList = location.state.players;
-    listPlayer = playerList;
-    // console.log("ListPlayer");
-    // console.log(listPlayer);
     show_modal("audio_prompt");
     setPlayers(playerList);
   }, []);
