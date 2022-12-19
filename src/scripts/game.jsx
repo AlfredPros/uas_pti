@@ -572,6 +572,7 @@ export default function Game() {
           }
           if (j == 0 && i == 1) {
             // Dog: id="dog"
+            fetch('https://dog.ceo/api/breed/shiba/images/random') 
             temp +=
               '<td colspan="' +
               num +
@@ -579,7 +580,7 @@ export default function Game() {
               num +
               '"> <img src=' +
               spike_sleep +
-              ' style="width:100%" id="dog" draggable="false" oncontextmenu="return false"/></td>';
+              {"message":"https:\/\/images.dog.ceo\/breeds\/shiba\/shiba-10.jpg","status":"success"};
           }
         } else {
           // Footer
