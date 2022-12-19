@@ -118,11 +118,11 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
+          $(".modal-backdrop").remove();
           navigate("/");
         });
 
         myModal.show();
-        $("iframe").remove();
         break;
       }
 
@@ -151,6 +151,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
+          $(".modal-backdrop").remove();
           navigate("/");
         });
 
@@ -184,6 +185,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
+          $(".modal-backdrop").remove();
           navigate("/");
         });
 
@@ -205,6 +207,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("confirm");
+          $(".modal-backdrop").remove();
           navigate("/");
         });
 
@@ -240,13 +243,6 @@ export default function Game() {
 
     // Hide backdrop
     $(".modal-backdrop").remove();
-    // let myModal = new bootstrap.Modal(
-    //   document.getElementById("staticBackdrop"),
-    //   {}
-    // );
-    // myModal.hide();
-    // $('iframe').remove();
-    // console.log("iframe")
   }
 
   /// Audio Functions
