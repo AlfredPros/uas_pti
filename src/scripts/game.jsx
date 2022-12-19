@@ -427,14 +427,16 @@ export default function Game() {
 
   function bone_clicked(obj) {
     obj.src = bone_hidden;
-    // obj.style = { width: "100%" };
+
+    let idName = "#" + obj.id;
+    $(idName).off();
+    $(idName).css("cursor", "");
 
     if (obj.className == "dangerous_boners") {
       dangerous_boners_selected();
     } else {
       safer_boners_selected();
     }
-    obj.onclick = "";
   }
 
   function hover_action() {
