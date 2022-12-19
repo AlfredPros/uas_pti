@@ -31,7 +31,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
   // Player
-  const [players, setPlayers] = useState(["a", "b", "c", "d"]);
+  const [players, setPlayers] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
@@ -246,6 +246,7 @@ export default function Game() {
     // myModal.hide();
     // $('iframe').remove();
     // console.log("iframe")
+    console.log(players);
   }
 
   /// Audio Functions
