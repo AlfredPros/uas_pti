@@ -50,6 +50,7 @@ export default function Game() {
   const [temp, setTemp] = useState("");
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
+  const [tableContent, setTableContent] = useState(<th>Bone</th>);
 
   const [playerScores, setPlayerScores] = useState([]);
 
@@ -373,7 +374,7 @@ export default function Game() {
     doge.style = {
       width: "100%",
       transition: "0.25s ease-in-out",
-      transform: "scale(2.5)"
+      transform: "scale(2.5)",
     };
     doge.src = spike_awake;
 
@@ -460,95 +461,74 @@ export default function Game() {
 
     // Generating bones
     let id = 0;
-    for (let i = 0; i < num + 2; i++) {
-      let temp = "";
-      temp += "<tr>";
 
+    // Procedural table making
+    const content = [];
+    for (let i = 0; i < num + 2; i++) {
       for (let j = 0; j < num + 2; j++) {
         if (i === 0) {
           // Header
-          temp += '<th style="width: ' + spacing + '%">';
           if (!(j == 0 || j == num + 1)) {
+            let idName = "bone" + id;
             if (dangerBonerTemp.includes(id)) {
-              temp +=
-                '<img class="dangerous_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/>';
+              content.push(
+                <th style={{ width: spacing + "%" }}>
+                  <img
+                    className="dangerous_boners"
+                    src={bone}
+                    style={{ width: "100%", cursor: "pointer" }}
+                    id={idName}
+                    onClick={() => {
+                      bone_clicked(this);
+                    }}
+                    onMouseOver={() => {
+                      hover_action();
+                    }}
+                    draggable="false"
+                    onContextMenu={() => {
+                      return false;
+                    }}
+                  />
+                </th>
+              );
             } else {
-              temp +=
-                '<img class="safer_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/>';
+              content.push(
+                <th style={{ width: spacing + "%" }}>
+                  <img
+                    className="safer_boners"
+                    src={bone}
+                    style={{ width: "100%", cursor: "pointer" }}
+                    id={idName}
+                    onClick={() => {
+                      bone_clicked(this);
+                    }}
+                    onMouseOver={() => {
+                      hover_action();
+                    }}
+                    draggable="false"
+                    onContextMenu={() => {
+                      return false;
+                    }}
+                  />
+                </th>
+              );
             }
             id++;
+          } else {
+            content.push(<th style={{ width: spacing + "%" }}></th>);
           }
-          temp += "</th>";
         } else if (i !== num + 1) {
           // Content
-          if (j == 0 || j == 1) {
-            if (dangerBonerTemp.includes(id)) {
-              temp +=
-                '<td> <img class="dangerous_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/> </td>';
-            } else {
-              temp +=
-                '<td> <img class="safer_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/> </td>';
-            }
-            id++;
-          }
-          if (j == 0 && i == 1) {
-            // Dog: id="dog"
-            temp +=
-              '<td colspan="' +
-              num +
-              '" rowspan="' +
-              num +
-              '"> <img src=' +
-              spike_sleep +
-              ' style="width:100%" id="dog" draggable="false" oncontextmenu="return false"/></td>';
-          }
         } else {
           // Footer
-          temp += "<td>";
-          if (!(j == 0 || j == num + 1)) {
-            if (dangerBonerTemp.includes(id)) {
-              temp +=
-                '<img class="dangerous_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/>';
-            } else {
-              temp +=
-                '<img class="safer_boners" src=' +
-                bone +
-                ' style="width:100%; cursor:pointer;" id="bone' +
-                id +
-                '" draggable="false" oncontextmenu="return false"/>';
-            }
-            id++;
-          }
-          temp += "</td>";
         }
       }
 
-      temp += "</tr>";
-
-      $("#game-content").append(temp);
+      //$("#game-content").append(temp);
 
       // Set bone functions
       // Problem: this executes more than one.
+      /*
       for (let i = 0; i < num * 4; i++) {
         let idName = "#bone" + i;
         $(idName).click(function () {
@@ -558,18 +538,25 @@ export default function Game() {
           hover_action();
         });
       }
+      */
     }
+    return content;
   }
 
   useEffect(() => {
+    /*
+    // Get players from Router
     if (location.state == null) {
       navigate("/");
       return;
     }
-    show_modal("audio_prompt");
-    // Get players from Router
     setPlayers(location.state.players.map((object) => object.player_name));
-    initializeBones();
+    */
+    //initializeBones();
+    show_modal("audio_prompt");
+    setPlayers(["a", "b", "c", "d"]);
+    setNum(players.length);
+    setTableContent(initializeBones());
   }, []);
 
   return (
@@ -631,7 +618,9 @@ export default function Game() {
               // Middle
             }
             <table>
-              <tbody id="game-content"></tbody>
+              <tbody id="game-content">
+                <tr>{tableContent}</tr>
+              </tbody>
             </table>
 
             <div className="row mt-5">
