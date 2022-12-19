@@ -1,39 +1,49 @@
+import "../styles/stylesAboutUs.css";
 import React from "react";
-import Card from "./Card";
-import Contacts from "../contacts.js";
-function App() {
+import Card from "./card";
+import contacts from "./contacts.js";
+import { useNavigate } from "react-router-dom";
+
+function createCard(contact) {
   return (
-    <div>  
-      <div>
-        <button  class="">Back</button>  
-      </div> 
-      <h1 className="heading">About us</h1>
-      <Card
-        img={Contacts[0].imgURL}
-        name={Contacts[0].name}
-        nim={Contacts[0].nim}
-        email={Contacts[0].email}
-      />
-      <Card
-        img={Contacts[1].imgURL}
-        name={Contacts[1].name}
-        nim={Contacts[1].nim}
-        email={Contacts[1].email}
-      />
-      <Card
-        img={Contacts[2].imgURL}
-        name={Contacts[2].name}
-        nim={Contacts[2].nim}
-        email={Contacts[2].email}
-      />
-      <Card  
-        img={Contacts[2].imgURL}
-        name={Contacts[2].name}
-        nim={Contacts[2].nim}
-        email={Contacts[2].email}
-      /> 
-    </div>
+    <Card
+      key={contact.id}
+      name={contact.name}
+      imgURL={contact.imgURL}
+      nim={contact.nim}
+      email={contact.email}
+    />
   );
 }
 
-export default App;
+function AboutUs() {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <div className="container-fluid mt-4">
+        <div className="row">
+          <div className="col-sm-12 col-md-1 offset-md-1">
+            <button
+              className="button btn-primary btn-block btn-2"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Back
+            </button>
+          </div>
+          <div className="col-md-8 text-center">
+            <h2 className="text-center" id="judul">
+              Group Profile
+            </h2>
+          </div>
+        </div>
+        <hr />
+      </div>
+      <div className="mt-5">{contacts.map(createCard)}</div>
+    </>
+  );
+}
+
+export default AboutUs;

@@ -123,6 +123,16 @@ export default function Home() {
           >
             Play
           </button>
+          <button
+            id="playButton"
+            onClick={() => {
+              navigate("/aboutus");
+            }}
+            style={{ width: "12rem" }}
+            className="button btn-primary btn-block btn-1"
+          >
+            About Us
+          </button>
         </div>
 
         <div className="m-3 px-5 boxplayer rounded ">
