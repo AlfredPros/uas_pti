@@ -27,11 +27,14 @@ import bone from "../resources/bone.png";
 import spike_sleep from "../resources/spike_sleep.png";
 import spike_awake from "../resources/spike_awake.png";
 import React, { useEffect, useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
   // Player
   const [players, setPlayers] = useState(["a", "b", "c", "d"]);
   const [playerTurn, setPlayerTurn] = useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Audio vars
   const [mute, setMute] = useState(false);
@@ -370,7 +373,7 @@ export default function Game() {
     doge.style = {
       width: "100%",
       transition: "0.25s ease-in-out",
-      transform: "scale(2.5)",
+      transform: "scale(2.5)"
     };
     doge.src = spike_awake;
 
@@ -559,9 +562,13 @@ export default function Game() {
   }
 
   useEffect(() => {
+    if (location.state == null) {
+      navigate("/");
+      return;
+    }
     show_modal("audio_prompt");
     // Get players from Router
-    setPlayers(["a", "b", "c", "d"]);
+    setPlayers(location.state.players.map((object) => object.player_name));
     initializeBones();
   }, []);
 
