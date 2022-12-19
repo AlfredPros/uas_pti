@@ -1,4 +1,4 @@
-import "../styles/stylesHome.css";
+import "../styles/stylesGame.css";
 import dogLogo from "../resources/spike_logo.png";
 import unmuted from "../resources/unmuted.png";
 import muted from "../resources/muted.png";
@@ -23,6 +23,28 @@ import UI_SciFi_Select from "../resources/UI_SciFi_Select.wav";
 import Equip1 from "../resources/Equip1.ogg";
 import bone_hidden from "../resources/bone_hidden.png";
 import bone from "../resources/bone.png";
+
+import umnPagi from "../resources/umn_pagi.webp";
+import umnSiang from "../resources/umn_siang.jpg";
+import umnMalam from "../resources/umn_malam.jpg";
+import clearSkyDay from "../resources/weather/01d@4x.png";
+import clearSkyNight from "../resources/weather/01d@4x.png";
+import fewCloudsDay from "../resources/weather/02d@4x.png";
+import fewCloudsNight from "../resources/weather/02n@4x.png";
+import scatteredCloudsDay from "../resources/weather/03d@4x.png";
+import scatteredCloudsNight from "../resources/weather/03n@4x.png";
+import brokenCloudsDay from "../resources/weather/04d@4x.png";
+import brokenCloudsNight from "../resources/weather/04n@4x.png";
+import showerRainDay from "../resources/weather/09d@4x.png";
+import showerRainNight from "../resources/weather/09n@4x.png";
+import rainDay from "../resources/weather/10d@4x.png";
+import rainNight from "../resources/weather/10n@4x.png";
+import thunderstormDay from "../resources/weather/11d@4x.png";
+import thunderstormNight from "../resources/weather/11n@4x.png";
+import snowDay from "../resources/weather/13d@4x.png";
+import snowNight from "../resources/weather/13n@4x.png";
+import mistDay from "../resources/weather/50d@4x.png";
+import mistNight from "../resources/weather/50n@4x.png";
 
 import spike_sleep from "../resources/spike_sleep.png";
 import spike_awake from "../resources/spike_awake.png";
@@ -52,7 +74,11 @@ export default function Game() {
   const [temp, setTemp] = useState("");
   const [win, setWin] = useState(false);
   const [tableCreated, setTableCreated] = useState(false);
+
+  // API Variables
   var dogeImg = { spike_sleep };
+  var weatherIcon = clearSkyDay;
+  var weatherMain = "Clear";
 
   // const [playerScores, setPlayerScores] = useState([]);
 
@@ -389,7 +415,7 @@ export default function Game() {
     //doge.src = dogeImg; //spike_awake;
 
     //change score board color to red
-    // $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
+    $("#" + players[playerTurn].name + "scoreboard").css("color", "#ff0000");
 
     //KickCurrentPlayer
     KickCurrentPlayer();
@@ -428,19 +454,16 @@ export default function Game() {
       show_modal("player_win");
     }
 
-    // //remove current player
-    // if (playerTurn == 0) {
-    //   setPlayers(players.splice(1, players.length - 1));
-    // } else if (playerTurn == players.length - 1) {
-    //   setPlayers(players.splice(0, players.length - 1));
-    // } else {
-    //   players.splice(playerTurn, 1);
-    // }
-
-    setPlayers((currentPlayer) => {
-      return currentPlayer.filter((player, index) => index != playerTurn);
-    });
-
+    //remove current player
+    if (playerTurn == 0) {
+      setPlayers(players.splice(1, players.length - 1));
+    } else if (playerTurn == players.length - 1) {
+      setPlayers(players.splice(0, players.length - 1));
+    } else {
+      players.splice(playerTurn, 1);
+      console.log("current players:");
+      console.log(players);
+    }
     //if kicked player is the last player in the queue, go to first player in the queue
     if (playerTurn >= players.length) {
       playerTurn = 0;
@@ -457,7 +480,7 @@ export default function Game() {
       currentPlayers.map((player, index) => {
         let comp = playerTurn - 1;
         // if (playerTurn < 0)
-        if (comp < 0) comp = players.length - 1;
+        if (comp < 0) comp = 3;
         console.log(comp);
         if (index === comp) {
           console.log(index);
@@ -638,8 +661,8 @@ export default function Game() {
 
   useEffect(() => {
     // Fetch doge
-    const url = "https://dog.ceo/api/breed/shiba/images/random";
-    fetch(url)
+    const urlDoge = "https://dog.ceo/api/breed/shiba/images/random";
+    fetch(urlDoge)
       .then((response) => response.json())
       .then((data) => {
         if (data.status != "success") {
@@ -648,8 +671,120 @@ export default function Game() {
           dogeImg = data.message;
           let doge = document.getElementById("dog");
           doge.src = data.message;
-          console.log("Fetch success! ", data.message);
+          console.log("Fetch doge success! ", data.message);
         }
+      });
+
+    let date = new Date();
+    let hour = date.getHours();
+    // Change background according to time
+    if (hour >= 18) {
+      console.log("umnMalam");
+      $("body").css("background", "");
+    } else if (hour >= 11) {
+      console.log("umnSiang");
+      $("body").css("background", { umnSiang });
+    } else if (hour >= 5) {
+      console.log("umnPagi");
+      $("body").css("background", { umnPagi });
+    } else {
+      console.log("umnMalam");
+      $("body").removeAttr("style");
+      $("body").css("background", umnMalam);
+    }
+
+    // Fetch weather
+    const urlWeather =
+      "https://api.openweathermap.org/data/2.5/weather?lat=-6.256200674087959&lon=106.61819479260977&appid=1c167086e928d4d955efbe5061f3371b";
+    fetch(urlWeather)
+      .then((response) => response.json())
+      .then((data) => {
+        let weather = data.weather[0];
+        weatherMain = weather.main;
+        let icon = weather.icon;
+
+        switch (icon) {
+          case "01d": {
+            weatherIcon = clearSkyDay;
+            break;
+          }
+          case "01n": {
+            weatherIcon = clearSkyNight;
+            break;
+          }
+          case "02d": {
+            weatherIcon = fewCloudsDay;
+            break;
+          }
+          case "02n": {
+            weatherIcon = fewCloudsNight;
+            break;
+          }
+          case "03d": {
+            weatherIcon = scatteredCloudsDay;
+            break;
+          }
+          case "03n": {
+            weatherIcon = scatteredCloudsNight;
+            break;
+          }
+          case "04d": {
+            weatherIcon = brokenCloudsDay;
+            break;
+          }
+          case "04n": {
+            weatherIcon = brokenCloudsNight;
+            break;
+          }
+          case "09d": {
+            weatherIcon = showerRainDay;
+            break;
+          }
+          case "09n": {
+            weatherIcon = showerRainNight;
+            break;
+          }
+          case "10d": {
+            weatherIcon = rainDay;
+            break;
+          }
+          case "10n": {
+            weatherIcon = rainNight;
+            break;
+          }
+          case "11d": {
+            weatherIcon = thunderstormDay;
+            break;
+          }
+          case "11n": {
+            weatherIcon = thunderstormNight;
+            break;
+          }
+          case "13d": {
+            weatherIcon = snowDay;
+            break;
+          }
+          case "13n": {
+            weatherIcon = snowNight;
+            break;
+          }
+          case "50d": {
+            weatherIcon = mistDay;
+            break;
+          }
+          case "50n": {
+            weatherIcon = mistNight;
+            break;
+          }
+          default: {
+            weatherIcon = clearSkyDay;
+          }
+        }
+
+        let weatherLogo = document.getElementById("weather_logo");
+        weatherLogo.src = weatherIcon;
+
+        console.log("Fetch weather success!");
       });
 
     if (location.state == null) {
@@ -722,8 +857,6 @@ export default function Game() {
 
   useEffect(() => {
     if (tableCreated === false) initializeBones();
-    console.log("current players:");
-    console.log(players);
   }, [players]);
 
   return (
@@ -749,10 +882,21 @@ export default function Game() {
             </h2>
             <img
               id="logo"
-              className="img-fluid mx-auto my-2"
+              className="img-fluid mx-auto my-0 mt-2"
               src={dogLogo}
               alt="SPIKE"
               draggable="false"
+              onContextMenu={() => {
+                return false;
+              }}
+            />
+            <img
+              id="weather_logo"
+              className="img-fluid mx-auto my-0 mt-2"
+              src={weatherIcon}
+              alt="Weather Logo"
+              draggable="false"
+              style={{ height: "42%" }}
               onContextMenu={() => {
                 return false;
               }}
