@@ -38,7 +38,7 @@ export default function Home() {
     let newPlayers = players;
     newPlayers.push(player);
     setPlayers(newPlayers);
-    console.log(players);
+    // console.log(players);
     $("#playerInput").val("");
     showPlayerList();
     insert_player();
