@@ -46,7 +46,6 @@ export default function Game() {
 
   // Table Bone vars
   const [temp, setTemp] = useState("");
-  const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
   // const [playerScores, setPlayerScores] = useState([]);
@@ -439,6 +438,7 @@ export default function Game() {
     }
   }
 
+  var picked_correct_boner = 0;
   function safer_boners_selected() {
     console.log(players.length);
     setPicked_correct_bone(picked_correct_bone + 1);
@@ -460,7 +460,7 @@ export default function Game() {
 
     // Check if all corect bones are picked
     let num = players.length;
-    if (picked_correct_bone == num * 3) {
+    if (picked_correct_boner === num * 3) {
       //stop the timer and declare victory
       setTimerToggle(0);
       setWin(true);
@@ -504,11 +504,9 @@ export default function Game() {
   }
 
   function initializeBones() {
-    let num = players.length;
-    let spacing = 1.0 / num;
-    // let playerScoresTemp = [];
-    // for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
-    // setPlayerScores(playerScoresTemp);
+    let playerScoresTemp = [];
+    for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
+    setPlayerScores(playerScoresTemp);
 
     // Code to select random bones
     let dangerBonerTemp = [];
