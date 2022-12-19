@@ -62,8 +62,33 @@ export default function Game() {
   var seconds = 10;
   // const [miliSeconds, setMiliSeconds] = useState(60);
   var miliSeconds = 60;
-  // const [timerToggle, setTimerToggle] = useState(0);
-  var timerToggle = 0;
+  const [timerToggle, setTimerToggle] = useState(false);
+
+  const calculateTimeLeft = () => {
+    // const difference = 10000;
+    let time = {};
+    time = {
+      seconds: Math.floor((difference / 1000) % 60),
+      milliseconds: Math.floor((difference / 1000) % 600)
+    };
+    return time;
+  };
+
+  const [timeLeft, setTimeLeft] = useState({seconds: 9, milliseconds: 999});
+
+  useEffect(() => {
+    timeLeft.seconds > 0 && timerToggle && setTimeout(() => {
+      setTimeLeft(prevTime => {
+        if (prevTime.milliseconds < 10) {
+          const difference = 10 - prevTime.milliseconds;
+          return {seconds: prevTime.seconds - 1, milliseconds: 999 - difference}
+        }
+        return {seconds: prevTime.seconds, milliseconds: prevTime.milliseconds - 10};
+      });
+    }, 10);
+    if (timeLeft.seconds <= 0) KickCurrentPlayer((late = true));
+  }, [timerToggle, timeLeft]);
+  // var timerToggle = 0;
   var late = false;
 
   // Table Bone vars
@@ -248,7 +273,9 @@ export default function Game() {
     //reset and start the timer
     seconds = 9;
     miliSeconds = 99;
-    timerToggle = 1;
+    // timerToggle = 1;
+    setTimeLeft({seconds: 9, milliseconds: 999});
+    setTimerToggle(true);
 
     // reset footer
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
@@ -384,10 +411,10 @@ export default function Game() {
   // Bone Behavior
   function dangerous_boners_selected() {
     // Timer stopped, show 00:00
-    timerToggle = 0;
-    $("#timer").html("00:00");
-    document.getElementById("timer").style.color = "#ff0000";
-
+    // timerToggle = 0;
+    // $("#timer").html("00:00");
+    // document.getElementById("timer").style.color = "#ff0000";
+    setTimerToggle(false);
     //Doge expands, hide bone
     $("#dog").css("transition", "0.25s ease-in-out");
     $("#dog").css("transform", "scale(2.5)");
@@ -445,10 +472,9 @@ export default function Game() {
 
   var picked_correct_boner = 0;
   function safer_boners_selected() {
+    setTimeLeft({seconds: 9, milliseconds: 999});
     console.log(players.length);
     picked_correct_boner++;
-    console.log("saferboneselected " + picked_correct_boner);
-    console.log("Player Turn: " + playerTurn);
     setPlayers((currentPlayers) =>
       currentPlayers.map((player, index) => {
         let comp = playerTurn - 1;
@@ -456,7 +482,6 @@ export default function Game() {
         if (comp < 0) comp = players.length - 1;
         console.log(comp);
         if (index === comp) {
-          console.log(index);
           return { ...player, score: player.score + 1 };
         }
         return player;
@@ -467,7 +492,8 @@ export default function Game() {
     let num = players.length;
     if (picked_correct_boner === num * 3) {
       //stop the timer and declare victory
-      timerToggle = 0;
+      // timerToggle = 0;
+      setTimerToggle(false);
       show_modal("player_tied");
       // change footer
       $("#footer_text").text("EVERYONE THAT SURVIVED WINS!!!!!");
@@ -765,69 +791,11 @@ export default function Game() {
     const playerList = location.state.players;
     show_modal("audio_prompt");
     setPlayers(playerList);
-
-    $(document).ready(function () {
-      //set a function to run every 0.01 second
-      setInterval(function () {
-        //update timer and turn variables
-        if (timerToggle > 0) {
-          miliSeconds--;
-          if (miliSeconds < 0) {
-            miliSeconds = 99;
-            seconds--;
-            if (seconds < 0) {
-              seconds = 9;
-              KickCurrentPlayer((late = true));
-              timerToggle = 0;
-              if (playerTurn >= players.length - 1) {
-                playerTurn = 0;
-              }
-            }
-          }
-        }
-
-        //update the user interface
-        $("#player-turn").html(players[playerTurn].name);
-        if (seconds < 10) {
-          if (seconds < 5) {
-            if (miliSeconds < 10) {
-              $("#timer").html("0" + seconds + ":0" + miliSeconds);
-              document.getElementById("timer").style.color = "#ff0000";
-            } else {
-              $("#timer").html("0" + seconds + ":" + miliSeconds);
-              document.getElementById("timer").style.color = "#ff0000";
-            }
-            /*
-                        if(seconds == 0 && miliSeconds == 0){
-                            $("#timer").html("00" + ":" + "00");
-                            timerToggle = 0;
-                            KickCurrentPlayer();
-                        }
-                        */
-          } else {
-            if (miliSeconds < 10) {
-              $("#timer").html("0" + seconds + ":0" + miliSeconds);
-              document.getElementById("timer").style.color = "#000";
-            } else {
-              $("#timer").html("0" + seconds + ":" + miliSeconds);
-              document.getElementById("timer").style.color = "#000";
-            }
-          }
-        } else {
-          if (miliSeconds < 10) {
-            $("#timer").html("0" + seconds + ":0" + miliSeconds);
-            document.getElementById("timer").style.color = "#ff0000";
-          } else {
-            $("#timer").html("0" + seconds + ":" + miliSeconds);
-            document.getElementById("timer").style.color = "#ff0000";
-          }
-        }
-      }, 10);
-    });
-  }, []);
+  }, []); 
 
   useEffect(() => {
     if (tableCreated === false) initializeBones();
+    console.log(players);
   }, [players]);
 
   return (
@@ -889,9 +857,16 @@ export default function Game() {
             <p>
               Turns: <span id="player-turn">1</span>
             </p>
-            <p>
-              Timer: <span id="timer">00:00</span>
-            </p>
+              {timeLeft.seconds ? (
+                  <p>
+                    <span>{timeLeft.seconds}</span>
+                    <span>:</span>
+                    <span>{timeLeft.milliseconds}</span>
+                  </p>
+                ) : (
+                  <p>Time is up 🔥</p>
+                )
+              }
             <div
               id="player-list"
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
