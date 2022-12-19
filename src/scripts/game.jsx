@@ -31,7 +31,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
   // Player
-  const [players, setPlayers] = useState(["a", "b", "c", "d"]);
+  const [players, setPlayers] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ export default function Game() {
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
 
+  const [dangerous_boners, setDangerous_boners] = useState([]);
   const [playerScores, setPlayerScores] = useState([]);
 
   /// Modal Functions
@@ -457,6 +458,7 @@ export default function Game() {
         dangerBonerTemp.push(x);
       }
     }
+    setDangerous_boners(dangerBonerTemp);
 
     // Generating bones
     let id = 0;
@@ -469,7 +471,7 @@ export default function Game() {
           // Header
           temp += '<th style="width: ' + spacing + '%">';
           if (!(j == 0 || j == num + 1)) {
-            if (dangerBonerTemp.includes(id)) {
+            if (dangerous_boners.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -490,7 +492,7 @@ export default function Game() {
         } else if (i !== num + 1) {
           // Content
           if (j == 0 || j == 1) {
-            if (dangerBonerTemp.includes(id)) {
+            if (dangerous_boners.includes(id)) {
               temp +=
                 '<td> <img class="dangerous_boners" src=' +
                 bone +
@@ -522,7 +524,7 @@ export default function Game() {
           // Footer
           temp += "<td>";
           if (!(j == 0 || j == num + 1)) {
-            if (dangerBonerTemp.includes(id)) {
+            if (dangerous_boners.includes(id)) {
               temp +=
                 '<img class="dangerous_boners" src=' +
                 bone +
@@ -550,11 +552,10 @@ export default function Game() {
       // Set bone functions
       // Problem: this executes more than one.
       for (let i = 0; i < num * 4; i++) {
-        let idName = "#bone" + i;
-        $(idName).click(function () {
+        $("#bone" + i).click(function () {
           bone_clicked(this);
         });
-        $(idName).mouseover(function () {
+        $("#bone" + i).mouseover(function () {
           hover_action();
         });
       }
@@ -566,9 +567,12 @@ export default function Game() {
       navigate("/");
       return;
     }
+    const playerList = location.state.players.map((object) => object.name);
+    console.log(playerList);
+    setPlayers(playerList);
+    console.log("Players");
+    console.log(players);
     show_modal("audio_prompt");
-    // Get players from Router
-    setPlayers(location.state.players.map((object) => object.player_name));
     initializeBones();
   }, []);
 
@@ -657,6 +661,7 @@ export default function Game() {
               onContextMenu={() => {
                 return false;
               }}
+              alt="mute"
             />
             <audio src={background_music} id="background_music" loop>
               music bgm
