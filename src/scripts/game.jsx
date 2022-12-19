@@ -118,7 +118,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -151,7 +151,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -184,7 +184,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("cancel");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -205,7 +205,7 @@ export default function Game() {
         );
         $("#cancel").click(function () {
           play_sound("confirm");
-          window.location.replace("index.html");
+          navigate("/");
         });
 
         myModal.show();
@@ -626,9 +626,9 @@ export default function Game() {
       navigate("/");
       return;
     }
+    const playerList = location.state.players;
     show_modal("audio_prompt");
-    // Get players from Router
-    setPlayers(location.state.players.map((object) => object.player_name));
+    setPlayers(playerList);
     initializeBones();
   }, []);
 
@@ -640,11 +640,9 @@ export default function Game() {
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-sm-12 col-md-1 offset-md-1">
-            <a href="index.html">
-              <button className="button btn-primary btn-block btn-2">
+              <button className="button btn-primary btn-block btn-2" onClick={() => {navigate("/")}}>
                 Back
               </button>
-            </a>
           </div>
           <div className="col-md-8 text-center">
             <h2 className="text-center" id="judul">
@@ -683,7 +681,12 @@ export default function Game() {
             <div
               id="player-list"
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
-            ></div>
+            >
+              {players.map((player, index) => (
+                <p key={index} id={player.name + "scoreboard"}>{player.name}  <span>{player.score}</span></p>
+              ))}
+
+            </div>
           </div>
 
           <div className="col-md-6 col-sm-12 text-center justify-content-center order-3">

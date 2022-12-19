@@ -4,61 +4,31 @@ import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const [name, setName] = useState("");
   const [players, setPlayers] = useState([]);
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  // function showPlayerList() {
-  //   $("#playerList").empty();
-  //   for (let i = 0; i < players.length; i++) {
-  //     $("#playerList").append("<li>" + players[i].name + "</li>");
-  //   }
-  // }
 
   function addPlayer() {
     if (players.length >= 5) {
       alert("Cannot add more players!");
-      inputRef.current.value = "";
+      setName("");
       return;
     }
-    let player_name = inputRef.current.value;
-    if (player_name.length < 1) {
+    if (name.length < 1) {
       alert("Please Input Name");
       return;
     }
     for (let i = 0; i < players.length; i++) {
-      if (players[i].name === player_name) {
+      if (players[i].name === name) {
         alert("Player already exists");
         return;
       }
     }
-    var player = {
-      name: player_name,
-      play_status: true
-    };
-    let newPlayers = players;
-    newPlayers.push(player);
-    setPlayers(newPlayers);
-    // console.log(players);
-    $("#playerInput").val("");
-    // showPlayerList();
-    // insert_player();
+    setName("");
+    setPlayers([...players, { name: name, score: 0}]);
+    console.log(players);
   }
-
-  // function insert_player() {
-  //   if (players.length === 0) {
-  //     document.getElementById("insertplayer").innerHTML = "Insert 1st player";
-  //   } else if (players.length === 1) {
-  //     document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
-  //   } else if (players.length === 2) {
-  //     document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
-  //   } else if (players.length === 3) {
-  //     document.getElementById("insertplayer").innerHTML = "Insert 4th player";
-  //   } else if (players.length === 4) {
-  //     document.getElementById("insertplayer").innerHTML = "Insert 5th player";
-  //   } else {
-  //     document.getElementById("insertplayer").innerHTML = "Player is full";
-  //   }
-  // }
 
   function playGame() {
     if (players.length < 2) {
@@ -105,8 +75,7 @@ export default function Home() {
 
         <div id="player" className="d-flex align-items-center playerDIV">
           <p style={{ paddingBlock: "auto" }} id="insertplayer">
-            {" "}
-            Insert 1st Player
+            Insert Player #{players.length + 1}
           </p>
         </div>
 
@@ -122,6 +91,8 @@ export default function Home() {
               }
             }}
             placeholder="New Player"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <label htmlFor="floatingInput">New Player</label>
         </div>
@@ -148,7 +119,9 @@ export default function Home() {
         <div className="m-3 px-5 boxplayer rounded ">
           <p id="player">Player List</p>
           <ol id="playerList" style={{ paddingLeft: "0px" }}>
-            {/* TODO: ADD RENDERING */}
+            {players.map((player, index) => (
+              <li key={index}>{player.name}</li>
+            ))}
           </ol>
         </div>
       </div>
