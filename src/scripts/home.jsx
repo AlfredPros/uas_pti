@@ -7,12 +7,12 @@ export default function Home() {
   const [players, setPlayers] = useState([]);
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  function showPlayerList() {
-    $("#playerList").empty();
-    for (let i = 0; i < players.length; i++) {
-      $("#playerList").append("<li>" + players[i].name + "</li>");
-    }
-  }
+  // function showPlayerList() {
+  //   $("#playerList").empty();
+  //   for (let i = 0; i < players.length; i++) {
+  //     $("#playerList").append("<li>" + players[i].name + "</li>");
+  //   }
+  // }
 
   function addPlayer() {
     if (players.length >= 5) {
@@ -40,25 +40,25 @@ export default function Home() {
     setPlayers(newPlayers);
     // console.log(players);
     $("#playerInput").val("");
-    showPlayerList();
-    insert_player();
+    // showPlayerList();
+    // insert_player();
   }
 
-  function insert_player() {
-    if (players.length === 0) {
-      document.getElementById("insertplayer").innerHTML = "Insert 1st player";
-    } else if (players.length === 1) {
-      document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
-    } else if (players.length === 2) {
-      document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
-    } else if (players.length === 3) {
-      document.getElementById("insertplayer").innerHTML = "Insert 4th player";
-    } else if (players.length === 4) {
-      document.getElementById("insertplayer").innerHTML = "Insert 5th player";
-    } else {
-      document.getElementById("insertplayer").innerHTML = "Player is full";
-    }
-  }
+  // function insert_player() {
+  //   if (players.length === 0) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 1st player";
+  //   } else if (players.length === 1) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 2nd player";
+  //   } else if (players.length === 2) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 3rd player";
+  //   } else if (players.length === 3) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 4th player";
+  //   } else if (players.length === 4) {
+  //     document.getElementById("insertplayer").innerHTML = "Insert 5th player";
+  //   } else {
+  //     document.getElementById("insertplayer").innerHTML = "Player is full";
+  //   }
+  // }
 
   function playGame() {
     if (players.length < 2) {
@@ -147,7 +147,9 @@ export default function Home() {
 
         <div className="m-3 px-5 boxplayer rounded ">
           <p id="player">Player List</p>
-          <ol id="playerList" style={{ paddingLeft: "0px" }}></ol>
+          <ol id="playerList" style={{ paddingLeft: "0px" }}>
+            {/* TODO: ADD RENDERING */}
+          </ol>
         </div>
       </div>
     </div>
