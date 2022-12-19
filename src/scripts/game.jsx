@@ -227,15 +227,16 @@ export default function Game() {
     $("#footer_text").text("Steal Spike's bones, but without waking him up!");
 
     //enlarge dog
-    /*
+
     let doge = document.getElementById("dog");
+    /*
     doge.style = {
       width: "100%",
       transition: "0.5s ease-in-out",
       transform: "scale(1.0)",
     };
-    doge.src = spike_sleep;
     */
+    doge.src = spike_sleep;
 
     // Hide backdrop
     $(".modal-backdrop").remove();
@@ -640,9 +641,14 @@ export default function Game() {
       <div className="container-fluid mt-4">
         <div className="row">
           <div className="col-sm-12 col-md-1 offset-md-1">
-              <button className="button btn-primary btn-block btn-2" onClick={() => {navigate("/")}}>
-                Back
-              </button>
+            <button
+              className="button btn-primary btn-block btn-2"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Back
+            </button>
           </div>
           <div className="col-md-8 text-center">
             <h2 className="text-center" id="judul">
@@ -683,9 +689,10 @@ export default function Game() {
               className="boxplayer rounded p-4 text-start justify-content-sm-center me-5"
             >
               {players.map((player, index) => (
-                <p key={index} id={player.name + "scoreboard"}>{player.name}  <span>{player.score}</span></p>
+                <p key={index} id={player.name + "scoreboard"}>
+                  {player.name} <span>{player.score}</span>
+                </p>
               ))}
-
             </div>
           </div>
 
