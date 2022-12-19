@@ -45,8 +45,6 @@ export default function Game() {
   const [timerToggle, setTimerToggle] = useState(0);
 
   // Table Bone vars
-  const [num, setNum] = useState(players.length); // 4
-  const [spacing, setSpacing] = useState(1.0 / num);
   const [temp, setTemp] = useState("");
   const [picked_correct_bone, setPicked_correct_bone] = useState(0);
   const [win, setWin] = useState(false);
@@ -451,6 +449,7 @@ export default function Game() {
     //setPlayerScores(...)
 
     // Check if all corect bones are picked
+    let num = players.length;
     if (picked_correct_bone == num * 3) {
       //stop the timer and declare victory
       setTimerToggle(0);
@@ -502,6 +501,8 @@ export default function Game() {
   }
 
   function initializeBones() {
+    let num = players.length;
+    let spacing = 1.0 / num;
     let playerScoresTemp = [];
     for (let i = 0; i < players.length; i++) playerScoresTemp.push(0);
     setPlayerScores(playerScoresTemp);
