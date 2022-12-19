@@ -299,9 +299,11 @@ export default function Game() {
 
   // Sound Function
   function play_sound(type) {
+    let track = document.getElementById("background_music");
+
     // Sound effect
 
-    if (mute == false) {
+    if (track.muted === false) {
       switch (type) {
         case "bone1": {
           $("#sound_effect_bone1")[0].play();
